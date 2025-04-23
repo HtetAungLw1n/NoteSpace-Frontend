@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #52796f;
+  --color-primary-hover: #416359;
+  --color-secondary: #fbfbff;
+  --color-tertiary: #131313;
+  --color-text: #324d44;
+
+  --default-font-family: "Ubuntu", sans-serif;
+}
