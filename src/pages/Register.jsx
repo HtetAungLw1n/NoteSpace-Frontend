@@ -68,9 +68,9 @@ function Register() {
               value={form.username}
               onChange={(e) => setForm({ ...form, username: e.target.value })}
               placeholder="username"
-              className="w-full py-4 px-5 h-14 border border-[#03120E] text-lg rounded-lg focus:outline-none placeholder:text-primary/60"
+              className="w-full py-4 px-5 h-14 border border-[#03120E] text-lg rounded-lg focus:outline-none placeholder:text-neutral-400 text-tertiary"
             />
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 px-2">
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 px-2">
               <User size={22} />
             </div>
           </div>
@@ -81,9 +81,9 @@ function Register() {
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               placeholder="email"
-              className="w-full py-4 px-5 h-14 border border-[#03120E] text-lg rounded-lg focus:outline-none placeholder:text-primary/60"
+              className="w-full py-4 px-5 h-14 border border-[#03120E] text-lg rounded-lg focus:outline-none placeholder:text-neutral-400 text-tertiary"
             />
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 px-2">
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 px-2">
               <Mail size={22} />
             </div>
           </div>
@@ -95,10 +95,10 @@ function Register() {
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               placeholder="password"
-              className="w-full py-4 px-5 h-14 border border-[#03120E] text-lg rounded-lg focus:outline-none placeholder:text-primary/60"
+              className="w-full py-4 px-5 h-14 border border-[#03120E] text-lg rounded-lg focus:outline-none placeholder:text-neutral-400 text-tertiary"
             />
             <div
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer px-2"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 cursor-pointer px-2"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? <Eye size={22} /> : <EyeOff size={22} />}
@@ -114,10 +114,10 @@ function Register() {
                 setForm({ ...form, re_password: e.target.value })
               }
               placeholder="confirm password"
-              className="w-full py-4 px-5 h-14 border border-[#03120E] text-lg rounded-lg focus:outline-none placeholder:text-primary/60"
+              className="w-full py-4 px-5 h-14 border border-[#03120E] text-lg rounded-lg focus:outline-none placeholder:text-neutral-400 text-tertiary"
             />
             <div
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer px-2"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 cursor-pointer px-2"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
               {showConfirmPassword ? <Eye size={22} /> : <EyeOff size={22} />}

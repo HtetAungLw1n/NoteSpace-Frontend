@@ -15,7 +15,11 @@ function Login() {
 
     try {
       const { data } = await publicAxios.post("/auth/jwt/create/", form);
-      localStorage.setItem("token", data.access);
+      const tokens = {
+        access: data.access,
+        refresh: data.refresh,
+      };
+      localStorage.setItem("tokens", JSON.stringify(tokens));
       navigate("/");
     } catch (err) {
       const errorData = err.response?.data;
@@ -51,9 +55,9 @@ function Login() {
               value={form.username}
               onChange={(e) => setForm({ ...form, username: e.target.value })}
               placeholder="username"
-              className="w-full py-4 px-5 h-14 border border-[#03120E] text-lg rounded-lg focus:outline-none placeholder:text-primary/60"
+              className="w-full py-4 px-5 h-14 border border-[#03120E] text-lg rounded-lg focus:outline-none placeholder:text-neutral-400 text-tertiary"
             />
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 px-2">
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 px-2">
               <User size={22} />
             </div>
           </div>
@@ -65,7 +69,7 @@ function Login() {
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               placeholder="password"
-              className="w-full py-4 px-5 h-14 border border-[#03120E] text-lg rounded-lg focus:outline-none placeholder:text-primary/60"
+              className="w-full py-4 px-5 h-14 border border-[#03120E] text-lg rounded-lg focus:outline-none placeholder:text-neutral-400 text-tertiary"
             />
             <div
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer px-2"
