@@ -1,10 +1,24 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import LandingPage from "./LandingPage";
-import NoteCover from "../components/NoteCover";
-import { PlusIcon } from "lucide-react";
+import { privateAxios } from "../utils/axios";
+import NoteList from "../components/NoteList";
 const Home = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
+
+  const [userInfo, setUserInfo] = useState({});
+
+  useEffect(() => {
+    const tokens = localStorage.getItem("tokens");
+    if (tokens) {
+      setIsLogin(true);
+    }
+    const fetchUserInfo = async () => {
+      const userInfo = await privateAxios.get("/auth/users/me/");
+      setUserInfo(userInfo.data);
+      console.log(userInfo.data);
+    };
+    fetchUserInfo();
+  }, []);
 
   return (
     <>
@@ -22,27 +36,12 @@ const Home = () => {
                 backgroundClip: "text",
               }}
             >
-              Welcome, Htet Aung Lwin
+              Welcome, {userInfo.username}
             </div>
             <div className="flex gap-2 border-b py-4">
               <div className="text-2xl">My Notes</div>
             </div>
-            <div className="">
-              <Link
-                to="/create"
-                className="flex items-center gap-2 bg-primary rounded-full p-4 py-2 w-fit my-4"
-              >
-                <PlusIcon className="w-6 h-6 " /> Create Note
-              </Link>
-              <div className="grid grid-cols-3 gap-8 w-full place-items-center">
-                <NoteCover />
-                <NoteCover />
-                <NoteCover />
-                <NoteCover />
-                <NoteCover />
-                <NoteCover />
-              </div>
-            </div>
+            <NoteList />
           </div>
         </div>
       )}
