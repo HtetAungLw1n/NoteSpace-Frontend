@@ -9,7 +9,7 @@
 }
 
 :root {
-  --summary-panel-width: 350px;
+  --summary-panel-width: 400px;
   --navbar-height: 72px;
   --content-max-width: 1200px;
 }
@@ -32,7 +32,7 @@ body {
 body.summary-open .container.notes-container {
   margin-right: var(--summary-panel-width);
   margin-left: 20px;
-  max-width: calc(100% - var(--summary-panel-width) - 60px);
+  max-width: calc(100% - var(--summary-panel-width) - 40px);
 }
 
 /* Summary Panel Styles */
