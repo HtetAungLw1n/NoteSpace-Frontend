@@ -11,7 +11,6 @@ const NoteList = () => {
     const fetchNotes = async () => {
       const notes = await privateAxios.get("/notes/");
       setNotes(notes.data);
-      console.log(notes);
     };
     fetchNotes();
   }, []);
@@ -19,9 +18,10 @@ const NoteList = () => {
     <div className="">
       <Link
         to="/create"
-        className="flex items-center gap-2 bg-primary rounded-full p-4 py-2 w-fit my-4"
+        className="flex items-center gap-2 border-2 border-neutral-400 rounded-full p-4 py-2 w-fit my-4 hover:border-primary transition-all duration-300"
       >
-        <PlusIcon className="w-6 h-6 " /> Create Note
+        <PlusIcon className="w-6 h-6" />
+        Create Note
       </Link>
       <div className="grid grid-cols-3 gap-8 w-full place-items-center pt-4">
         {notes.map((note) => (

@@ -1,42 +1,41 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #3e8c45;
+  --color-primary: #3d3db8;
   --color-secondary: #fbfbff;
   --color-tertiary: #131313;
 
-    --default-font-family: "Poppins", sans-serif;
+  --default-font-family: "Poppins", sans-serif;
 }
 
 body {
-    background-color: var(--color-tertiary);
-    color: var(--color-secondary);
+  background-color: var(--color-tertiary);
+  color: var(--color-secondary);
 }
 
 .text-gradient {
-    color: #96c76e;
-    background-image: linear-gradient(
-        45deg,
-        #106110,
-        #c0c79d 50%,
-        #c0c79d 100%
-    );
-    background-size: 200% auto; /* Makes the gradient big enough to animate */
-    background-position: left center;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gradientShift 4s ease infinite;
+  background: #3d3db8;
+  background: linear-gradient(
+    90deg,
+    rgba(61, 61, 184, 1) 0%,
+    rgba(0, 212, 255, 1) 100%
+  );
+  background-size: 200% auto; /* Makes the gradient big enough to animate */
+  background-position: left center;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 4s ease infinite;
 }
 
 @keyframes gradientShift {
-    0% {
-        background-position: left center;
-    }
-    50% {
-        background-position: right center;
-    }
-    100% {
-        background-position: left center;
-    }
+  0% {
+    background-position: left center;
+  }
+  50% {
+    background-position: right center;
+  }
+  100% {
+    background-position: left center;
+  }
 }

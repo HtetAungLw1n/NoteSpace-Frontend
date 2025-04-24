@@ -15,7 +15,6 @@ const Home = () => {
     const fetchUserInfo = async () => {
       const userInfo = await privateAxios.get("/auth/users/me/");
       setUserInfo(userInfo.data);
-      console.log(userInfo.data);
     };
     fetchUserInfo();
   }, []);
@@ -30,7 +29,7 @@ const Home = () => {
               className="text-6xl font-semibold py-2"
               style={{
                 background:
-                  "linear-gradient(45deg, #106110, #c0c79d 50%, #c0c79d 100%)",
+                  "linear-gradient(90deg, rgba(61, 61, 184, 1) 0%, rgba(0, 212, 255, 1) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",

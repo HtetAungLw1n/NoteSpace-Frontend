@@ -16,9 +16,9 @@ const NoteCover = ({ note }) => {
   return (
     <Link
       to={`/note/${note.id}`}
-      className="h-56 w-full relative rounded-xl bg-primary"
+      className="h-56 w-full relative rounded-xl border border-primary  bg-neutral-900"
     >
-      <div className="absolute top-2 right-2">
+      <div className="absolute top-2 right-4">
         <Ellipsis
           className="w-6 h-6 cursor-pointer"
           onClick={(e) => {
@@ -29,10 +29,10 @@ const NoteCover = ({ note }) => {
         />
         {isMenuOpen && <NoteMenu />}
       </div>
-      <div className="absolute bottom-2 right-2">
+      <div className="absolute bottom-4 right-4">
         <div className="text-white text-sm">{formattedDate}</div>
       </div>
-      <div className="absolute bottom-2 left-2">
+      <div className="absolute bottom-4 left-4">
         <div className="text-white text-4xl">{note.title}</div>
       </div>
     </Link>
