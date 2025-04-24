@@ -1,7 +1,8 @@
 import React from "react";
 import { FileText } from "lucide-react";
+import { PulseLoader } from "react-spinners";
 
-const SummarizePanel = ({ isOpen, summary }) => {
+const SummarizePanel = ({ isOpen, summary, isSummarizing }) => {
   // Format the summary text into bullet points if available
   const formatSummaryContent = (text) => {
     if (!text) return [];
@@ -44,7 +45,12 @@ const SummarizePanel = ({ isOpen, summary }) => {
       <div className="h-full flex flex-col">
         {/* Content */}
         <div className="flex-grow overflow-y-auto p-8">
-          {summaryContent ? (
+          {isSummarizing && (
+            <div className="h-full flex items-center justify-center">
+              <PulseLoader color="#6366f1" size={10} />
+            </div>
+          )}
+          {!isSummarizing && summaryContent && (
             <div className="mt-4 pb-28">
               <div className="flex items-center justify-between mb-6">
                 <div className="text-neutral-400 text-sm">Updated 2m ago</div>
@@ -85,7 +91,8 @@ const SummarizePanel = ({ isOpen, summary }) => {
                 </button>
               </div>
             </div>
-          ) : (
+          )}
+          {!isSummarizing && !summaryContent && (
             <div className="text-center mt-20">
               <div className="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FileText size={28} className="text-neutral-500" />

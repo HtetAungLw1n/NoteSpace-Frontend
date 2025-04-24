@@ -39,6 +39,48 @@ const Navbar = () => {
     }
   };
 
+  // Reset states when switching notes
+  useEffect(() => {
+    if (id) {
+      setSummaryData(null);
+      setShowSummary(false);
+      setIsSummarizing(false);
+    }
+  }, [id]);
+
+  // Fetch note data and summary when on a note page
+  useEffect(() => {
+    if (!id || !isNotePage) {
+      setNoteData(null);
+      setSummaryData(null);
+      setShowSummary(false);
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        // Fetch note data
+        const noteResponse = await privateAxios.get(`/notes/${id}/`);
+        setNoteData(noteResponse.data);
+
+        // Try to fetch existing summary
+        try {
+          const summaryResponse = await privateAxios.get(
+            `/notes/${id}/summary/`
+          );
+          setSummaryData(summaryResponse.data);
+        } catch (error) {
+          // If no summary exists, just ignore the error
+          console.log("No existing summary found");
+        }
+      } catch (error) {
+        console.error("Failed to fetch note data:", error);
+      }
+    };
+
+    fetchData();
+  }, [id, isNotePage]);
+
   // Update body class when summary panel is shown/hidden
   useEffect(() => {
     if (showSummary) {
@@ -52,27 +94,12 @@ const Navbar = () => {
 
   // Close summary panel when leaving notes page
   useEffect(() => {
-    if (!isNotePage) setShowSummary(false);
-  }, [location.pathname, isNotePage]);
-
-  // Fetch note data when on a note page
-  useEffect(() => {
-    if (!id || !isNotePage) {
-      setNoteData(null);
-      return;
+    if (!isNotePage) {
+      setShowSummary(false);
+      setSummaryData(null);
+      setIsSummarizing(false);
     }
-
-    const fetchNoteData = async () => {
-      try {
-        const response = await privateAxios.get(`/notes/${id}/`);
-        setNoteData(response.data);
-      } catch (error) {
-        console.error("Failed to fetch note data:", error);
-      }
-    };
-
-    fetchNoteData();
-  }, [id, isNotePage]);
+  }, [location.pathname, isNotePage]);
 
   // Handle note publishing status toggle
   const handlePublishToggle = async () => {
@@ -112,7 +139,11 @@ const Navbar = () => {
         </div>
       </nav>
 
-      <SummarizePanel isOpen={showSummary} summary={summaryData} />
+      <SummarizePanel
+        isOpen={showSummary}
+        summary={summaryData}
+        isSummarizing={isSummarizing}
+      />
     </>
   );
 
@@ -142,15 +173,13 @@ const Navbar = () => {
             <ChevronRight size={18} />
           </button>
         ) : (
-          summaryData && (
-            <button
-              onClick={handleToggleSummary}
-              className="flex items-center justify-center w-10 h-10 rounded text-secondary cursor-pointer"
-              aria-label="Open summary panel"
-            >
-              <ChevronLeft size={18} />
-            </button>
-          )
+          <button
+            onClick={handleToggleSummary}
+            className="flex items-center justify-center w-10 h-10 rounded text-secondary cursor-pointer"
+            aria-label="Open summary panel"
+          >
+            <ChevronLeft size={18} />
+          </button>
         )}
         <button
           onClick={handleSummarize}
