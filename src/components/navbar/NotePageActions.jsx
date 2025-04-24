@@ -16,7 +16,7 @@ const NotePageActions = ({
       {showSummary ? (
         <button
           onClick={onToggleSummary}
-          className="flex items-center justify-center w-10 h-10 rounded text-secondary cursor-pointer hover:bg-secondary/10 transition-colors"
+          className="flex items-center justify-center w-10 h-10 rounded text-secondary cursor-pointer"
           aria-label="Close summary panel"
         >
           <ChevronRight size={18} />
@@ -24,7 +24,7 @@ const NotePageActions = ({
       ) : (
         <button
           onClick={onToggleSummary}
-          className="flex items-center justify-center w-10 h-10 rounded text-secondary cursor-pointer hover:bg-secondary/10 transition-colors"
+          className="flex items-center justify-center w-10 h-10 rounded text-secondary cursor-pointer"
           aria-label="Open summary panel"
         >
           <ChevronLeft size={18} />

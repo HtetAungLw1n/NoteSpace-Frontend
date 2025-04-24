@@ -7,6 +7,8 @@ import ExplorePage from "./pages/ExplorePage";
 import Error from "./pages/Error";
 import Note from "./pages/Note";
 import "react-quill-new/dist/quill.snow.css";
+import AIChat from "./components/chat/AIChat";
+import { UIProvider } from "./contexts/UIContext";
 
 const router = createBrowserRouter([
   {
@@ -40,9 +42,10 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <>
+    <UIProvider>
       <RouterProvider router={router} />
-    </>
+      <AIChat />
+    </UIProvider>
   );
 }
 
