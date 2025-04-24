@@ -34,7 +34,7 @@ const NoteCover = ({ note }) => {
         )}
       </div>
       <div className="absolute bottom-4 right-4">
-        <div className="text-white text-sm">{formattedDate}</div>
+        <div className="text-white text-sm opacity-70">{formattedDate}</div>
       </div>
       <div className="absolute bottom-4 left-4 max-w-52 line-clamp-2">
         <div className="text-white text-3xl break-words">{note.title}</div>

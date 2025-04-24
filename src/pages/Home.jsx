@@ -7,16 +7,25 @@ const Home = () => {
 
   const [userInfo, setUserInfo] = useState({});
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const tokens = localStorage.getItem("tokens");
     if (tokens) {
       setIsLogin(true);
     }
-    const fetchUserInfo = async () => {
-      const userInfo = await privateAxios.get("/auth/users/me/");
-      setUserInfo(userInfo.data);
-    };
-    fetchUserInfo();
+    try {
+      const fetchUserInfo = async () => {
+        setIsLoading(true);
+        const userInfo = await privateAxios.get("/auth/users/me/");
+        setUserInfo(userInfo.data);
+      };
+      fetchUserInfo();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   return (
@@ -35,7 +44,8 @@ const Home = () => {
                 backgroundClip: "text",
               }}
             >
-              Welcome, {userInfo.username}
+              Welcome,{" "}
+              {isLoading ? <div className="loader"></div> : userInfo.username}
             </div>
             <div className="flex gap-2 border-b py-4">
               <div className="text-2xl">My Notes</div>

@@ -10,8 +10,12 @@ const NoteList = () => {
 
   useEffect(() => {
     const fetchNotes = async () => {
-      const notes = await privateAxios.get("/notes/");
-      setNotes(notes.data);
+      try {
+        const notes = await privateAxios.get("/notes/");
+        setNotes(notes.data);
+      } catch (err) {
+        console.error("Failed to fetch notes:", err);
+      }
     };
     fetchNotes();
   }, []);
@@ -40,9 +44,13 @@ const NoteList = () => {
         Create Note
       </button>
       <div className="grid grid-cols-3 gap-8 w-full place-items-center pt-4">
-        {notes.map((note) => (
-          <NoteCover key={note.id} note={note} />
-        ))}
+        {notes.length === 0 ? (
+          <div className="text-secondary text-lg text-start w-full">
+            No notes found. Start creating notes.
+          </div>
+        ) : (
+          notes.map((note) => <NoteCover key={note.id} note={note} />)
+        )}
       </div>
     </div>
   );

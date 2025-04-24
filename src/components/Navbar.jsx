@@ -1,4 +1,4 @@
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import SummarizePanel from "./SummarizePanel";
@@ -79,6 +79,13 @@ const Navbar = () => {
     }
   };
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("tokens");
+    navigate("/login");
+  };
+
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 bg-neutral-900/30 backdrop-blur-md z-50">
@@ -147,22 +154,16 @@ const Navbar = () => {
     return (
       <div className="flex items-center gap-8">
         <Link
-          to="/"
-          className="text-secondary hover:text-primary transition-all duration-300"
-        >
-          About
-        </Link>
-        <Link
           to="/explore"
           className="text-secondary hover:text-primary transition-colors"
         >
           Explore
         </Link>
         <Link
-          to="/react-flow"
+          onClick={handleLogout}
           className="text-secondary hover:text-primary transition-colors"
         >
-          React Flow
+          Logout
         </Link>
       </div>
     );
