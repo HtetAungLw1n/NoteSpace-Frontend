@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LandingPage from "./LandingPage";
 import { privateAxios } from "../utils/axios";
-import NoteList from "../components/NoteList";
+import NoteList from "../components/note/NoteList";
 const Home = () => {
   const [isLogin, setIsLogin] = useState(false);
 

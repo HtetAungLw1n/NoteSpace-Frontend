@@ -5,7 +5,7 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import ExplorePage from "./pages/ExplorePage";
 import Error from "./pages/Error";
-import Notes from "./pages/Notes";
+import Note from "./pages/Note";
 import "react-quill-new/dist/quill.snow.css";
 
 const router = createBrowserRouter([
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/notes/:id",
-        element: <Notes />,
+        element: <Note />,
       },
     ],
   },

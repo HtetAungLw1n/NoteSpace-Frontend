@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { dateFormatter } from "../utils/formatter";
+import { dateFormatter } from "../../utils/formatter";
 
 const Note = ({ note }) => {
   const formattedDate = dateFormatter(note?.updated_at);
