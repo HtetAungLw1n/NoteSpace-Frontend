@@ -8,15 +8,20 @@ const ExplorePage = () => {
 
   const [query, setQuery] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const searchNotes = async () => {
       try {
+        setIsLoading(true);
         const response = await privateAxios.get(
           `/notes/public?search=${query}`
         );
         setExploreNotes(response.data);
       } catch (error) {
         console.error("Failed to fetch public notes:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -26,10 +31,13 @@ const ExplorePage = () => {
   useEffect(() => {
     const fetchExploreNotes = async () => {
       try {
+        setIsLoading(true);
         const response = await privateAxios.get("/notes/public");
         setExploreNotes(response.data);
       } catch (error) {
         console.error("Failed to fetch public notes:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -59,10 +67,14 @@ const ExplorePage = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6 mt-10 px-32 py-10">
-        {exploreNotes.length > 0 ? (
+        {isLoading ? (
+          <div className="loader"></div>
+        ) : exploreNotes.length > 0 ? (
           exploreNotes.map((note) => <Note key={note.id} note={note} />)
         ) : (
-          <>No notes found</>
+          <div className="text-secondary text-lg text-start w-full">
+            No notes found.
+          </div>
         )}
       </div>
     </div>

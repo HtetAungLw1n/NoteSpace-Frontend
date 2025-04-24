@@ -15,6 +15,7 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -26,6 +27,7 @@ function Register() {
     }
 
     try {
+      setIsLoading(true);
       await publicAxios.post("/auth/users/", form);
       navigate("/login");
     } catch (err) {
@@ -44,6 +46,8 @@ function Register() {
       }
 
       console.error(err.response?.data);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -126,9 +130,9 @@ function Register() {
 
           <button
             type="submit"
-            className="w-full h-14 mt-3 bg-primary text-lg text-white rounded-lg cursor-pointer hover:bg-primary-hover transition-colors focus:outline-none"
+            className="w-full h-14  flex justify-center items-center mt-3 bg-primary text-lg text-white rounded-lg cursor-pointer hover:bg-primary-hover transition-colors focus:outline-none"
           >
-            Register
+            {isLoading ? <div className="loader"></div> : <div>Register</div>}
           </button>
         </form>
       </div>
