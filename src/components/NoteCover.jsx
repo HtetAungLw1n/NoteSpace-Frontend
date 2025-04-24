@@ -11,7 +11,7 @@ const NoteCover = ({ note }) => {
   return (
     <Link
       to={`/notes/${note.id}`}
-      className="h-56 w-full relative rounded-xl border border-primary/50 bg-neutral-900 hover:border-primary duration-300"
+      className="h-56 w-full relative rounded-xl border border-primary/50 bg-neutral-900 hover:border-primary hover:shadow-primary hover:shadow-md transition-all duration-300"
     >
       <div className="absolute top-2 right-4">
         <Ellipsis

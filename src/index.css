@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #3d3db8;
+  --color-primary: #3454c3;
   --color-secondary: #fbfbff;
   --color-tertiary: #131313;
   --default-font-family: "Poppins", sans-serif;
+  --font-orbitron: "Orbitron", sans-serif;
 }
 
 :root {

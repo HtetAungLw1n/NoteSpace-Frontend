@@ -96,7 +96,9 @@ const Navbar = () => {
   function Logo() {
     return (
       <Link to="/" className="flex items-center">
-        <h1 className="text-2xl font-bold text-secondary py-2">NoteSpace</h1>
+        <h1 className="text-2xl font-bold text-secondary py-2 font-orbitron">
+          NoteSpace
+        </h1>
       </Link>
     );
   }
@@ -146,7 +148,7 @@ const Navbar = () => {
       <div className="flex items-center gap-8">
         <Link
           to="/"
-          className="text-secondary hover:text-primary transition-colors"
+          className="text-secondary hover:text-primary transition-all duration-300"
         >
           About
         </Link>
@@ -155,6 +157,12 @@ const Navbar = () => {
           className="text-secondary hover:text-primary transition-colors"
         >
           Explore
+        </Link>
+        <Link
+          to="/react-flow"
+          className="text-secondary hover:text-primary transition-colors"
+        >
+          React Flow
         </Link>
       </div>
     );
