@@ -23,7 +23,7 @@ const Home = () => {
     <>
       {!isLogin && <LandingPage />}
       {isLogin && (
-        <div className="container mx-auto pt-40">
+        <div className="container mx-auto pt-40 pb-10">
           <div className="flex flex-col justify-center px-26">
             <div
               className="text-6xl font-semibold py-2"

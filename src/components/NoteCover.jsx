@@ -2,16 +2,11 @@ import { Ellipsis } from "lucide-react";
 import React, { useState } from "react";
 import NoteMenu from "./NoteMenu";
 import { Link } from "react-router-dom";
+import { dateFormatter } from "../utils/formatter";
 
 const NoteCover = ({ note }) => {
-  const date = new Date(note.created_at);
-  const formattedDate = date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const formattedDate = dateFormatter(note?.updated_at);
 
   return (
     <Link
@@ -32,8 +27,8 @@ const NoteCover = ({ note }) => {
       <div className="absolute bottom-4 right-4">
         <div className="text-white text-sm">{formattedDate}</div>
       </div>
-      <div className="absolute bottom-4 left-4">
-        <div className="text-white text-4xl">{note.title}</div>
+      <div className="absolute bottom-4 left-4 max-w-52 line-clamp-2">
+        <div className="text-white text-3xl break-words">{note.title}</div>
       </div>
     </Link>
   );

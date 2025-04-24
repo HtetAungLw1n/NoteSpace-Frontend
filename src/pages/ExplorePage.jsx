@@ -2,8 +2,26 @@ import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import Note from "../components/Note";
 import { privateAxios } from "../utils/axios";
+
 const ExplorePage = () => {
   const [exploreNotes, setExploreNotes] = useState([]);
+
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    const searchNotes = async () => {
+      try {
+        const response = await privateAxios.get(
+          `/notes/public?search=${query}`
+        );
+        setExploreNotes(response.data);
+      } catch (error) {
+        console.error("Failed to fetch public notes:", error);
+      }
+    };
+
+    searchNotes();
+  }, [query]);
 
   useEffect(() => {
     const fetchExploreNotes = async () => {
@@ -33,18 +51,19 @@ const ExplorePage = () => {
         <input
           type="text"
           placeholder="Search notes by title"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           className="w-[90%] px-2 outline-none bg-transparent text-white"
         />
         <Search className="text-neutral-400 w-[10%]" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6 mt-10 px-18">
-        <Note />
-        <Note />
-        <Note />
-        <Note />
-        <Note />
-        <Note />
+        {exploreNotes.length > 0 ? (
+          exploreNotes.map((note) => <Note key={note.id} note={note} />)
+        ) : (
+          <>No notes found</>
+        )}
       </div>
     </div>
   );
