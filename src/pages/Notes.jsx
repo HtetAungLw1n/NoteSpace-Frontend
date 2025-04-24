@@ -151,6 +151,7 @@ function Note() {
         ) {
             setSaveStatus("saving");
             debouncedSave(note, content);
+            console.log(content)
         }
     }, [note, content, debouncedSave]);
 
