@@ -11,15 +11,32 @@ const Navbar = () => {
   const [showSummary, setShowSummary] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [noteData, setNoteData] = useState(null);
+  const [summaryData, setSummaryData] = useState(null);
+  const [isSummarizing, setIsSummarizing] = useState(false);
 
   const isNotePage = location.pathname.startsWith("/notes/");
 
   // Toggle summary panel
   const handleToggleSummary = () => setShowSummary(!showSummary);
 
-  const handleSummarize = () => {
-    // TODO: Implement summarize
-    setShowSummary(true);
+  const handleSummarize = async () => {
+    if (!id || isSummarizing) return;
+
+    try {
+      setIsSummarizing(true);
+      setShowSummary(true);
+
+      const response = await privateAxios.get(`/notes/${id}/summary/`);
+      setSummaryData(response.data);
+      console.log(response.data);
+
+      // showToast.success("Note summarized successfully");
+    } catch (error) {
+      console.error("Failed to summarize note:", error);
+      showToast.error("Failed to summarize note");
+    } finally {
+      setIsSummarizing(false);
+    }
   };
 
   // Update body class when summary panel is shown/hidden
@@ -89,13 +106,13 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 bg-neutral-900/30 backdrop-blur-md z-50">
-        <div className="container mx-auto flex justify-between items-center h-full p-4 px-10">
+        <div className="container mx-auto flex justify-between items-center h-full p-4">
           <Logo />
           {isNotePage ? <NotePageActions /> : <StandardNavLinks />}
         </div>
       </nav>
 
-      <SummarizePanel isOpen={showSummary} />
+      <SummarizePanel isOpen={showSummary} summary={summaryData} />
     </>
   );
 
@@ -116,7 +133,7 @@ const Navbar = () => {
 
     return (
       <div className="flex items-center gap-4">
-        {showSummary && (
+        {showSummary ? (
           <button
             onClick={handleToggleSummary}
             className="flex items-center justify-center w-10 h-10 rounded text-secondary cursor-pointer"
@@ -124,12 +141,23 @@ const Navbar = () => {
           >
             <ChevronRight size={18} />
           </button>
+        ) : (
+          summaryData && (
+            <button
+              onClick={handleToggleSummary}
+              className="flex items-center justify-center w-10 h-10 rounded text-secondary cursor-pointer"
+              aria-label="Open summary panel"
+            >
+              <ChevronLeft size={18} />
+            </button>
+          )
         )}
         <button
           onClick={handleSummarize}
           className="flex items-center px-4 h-10 rounded text-secondary hover:bg-secondary/10 transition-colors cursor-pointer"
+          disabled={isSummarizing}
         >
-          Summarize
+          {isSummarizing ? "Summarizing..." : "Summarize"}
         </button>
 
         <button

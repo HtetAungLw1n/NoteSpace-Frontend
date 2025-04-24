@@ -4,7 +4,7 @@ import NoteMenu from "./NoteMenu";
 import { Link } from "react-router-dom";
 import { dateFormatter } from "../utils/formatter";
 
-const NoteCover = ({ note }) => {
+const NoteCover = ({ note, fetchNotes }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const formattedDate = dateFormatter(note?.updated_at);
 
@@ -29,7 +29,7 @@ const NoteCover = ({ note }) => {
               e.preventDefault();
             }}
           >
-            <NoteMenu id={note.id} />
+            <NoteMenu id={note.id} fetchNotes={fetchNotes} />
           </div>
         )}
       </div>

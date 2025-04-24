@@ -1,15 +1,17 @@
-import { PlusIcon } from "lucide-react";
+import { FileUp, FileUpIcon, PlusIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NoteCover from "./NoteCover";
 import { privateAxios } from "../utils/axios";
+import ImportModal from "./ImportModal";
 
 const NoteList = () => {
-  const [notes, setNotes] = useState([]);
-  const navigate = useNavigate();
+    const [notes, setNotes] = useState([]);
+    const [importModalOpen, setImportModalOpen] = useState(false);
+    const navigate = useNavigate();
 
-  useEffect(() => {
     const fetchNotes = async () => {
+
       try {
         const notes = await privateAxios.get("/notes/");
         setNotes(notes.data);
@@ -17,33 +19,44 @@ const NoteList = () => {
         console.error("Failed to fetch notes:", err);
       }
     };
-    fetchNotes();
-  }, []);
 
-  const handleCreateNote = async () => {
-    try {
-      const response = await privateAxios.post("/notes/", {
-        title: "Untitled",
-        content: "",
-      });
-      if (response.data && response.data.id) {
-        navigate(`/notes/${response.data.id}`);
-      }
-    } catch (err) {
-      console.error("Failed to create new note:", err);
-    }
-  };
+    useEffect(() => {
+        fetchNotes();
+    }, []);
 
-  return (
-    <div className="">
-      <button
-        onClick={handleCreateNote}
-        className="cursor-pointer flex items-center gap-2 border-2 border-neutral-400 rounded-full p-4 py-2 w-fit my-4 hover:border-primary transition-all duration-300"
-      >
-        <PlusIcon className="w-6 h-6" />
-        Create Note
-      </button>
-      <div className="grid grid-cols-3 gap-8 w-full place-items-center pt-4">
+    const handleCreateNote = async () => {
+        try {
+            const response = await privateAxios.post("/notes/", {
+                title: "Untitled",
+                content: "",
+            });
+            if (response.data && response.data.id) {
+                navigate(`/notes/${response.data.id}`);
+            }
+        } catch (err) {
+            console.error("Failed to create new note:", err);
+        }
+    };
+
+    return (
+        <div className="">
+            <div className="flex gap-2">
+                <button
+                    onClick={handleCreateNote}
+                    className="cursor-pointer flex items-center gap-2 border-2 border-neutral-400 rounded-xl p-4 py-2 w-fit my-4 hover:border-primary transition-all duration-300"
+                >
+                    <PlusIcon className="w-6 h-6" />
+                    Create Note
+                </button>
+                <button
+                    onClick={() => setImportModalOpen(true)}
+                    className="cursor-pointer flex items-center gap-2 border-2 border-neutral-400 rounded-xl p-4 py-2 w-fit my-4 hover:border-primary transition-all duration-300"
+                >
+                    <FileUp className="w-5 h-5" />
+                    Import PDF
+                </button>
+            </div>
+            <div className="grid grid-cols-3 gap-8 w-full place-items-center pt-4">
         {notes.length === 0 ? (
           <div className="text-secondary text-lg text-start w-full">
             No notes found. Start creating notes.
@@ -52,8 +65,12 @@ const NoteList = () => {
           notes.map((note) => <NoteCover key={note.id} note={note} />)
         )}
       </div>
-    </div>
-  );
+
+            {importModalOpen && (
+                <ImportModal onClose={() => setImportModalOpen(false)} />
+            )}
+        </div>
+    );
 };
 
 export default NoteList;
