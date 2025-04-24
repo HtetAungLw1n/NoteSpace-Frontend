@@ -39,3 +39,59 @@ body {
     background-position: left center;
   }
 }
+
+/* Quill Editor Customizations */
+.quill-container {
+  position: relative;
+}
+
+.ql-toolbar {
+  @apply relative bg-gray-50 border-0 opacity-0 max-h-0 overflow-hidden transition-all duration-300 ease-in-out pointer-events-none z-10;
+  padding: 0 !important;
+}
+
+/* Show toolbar when editor is focused */
+.editor-focused .ql-toolbar,
+.quill-container:focus-within .ql-toolbar {
+  @apply opacity-100 max-h-[200px] pointer-events-auto;
+  padding: 8px !important;
+}
+
+/* General styling */
+.ql-container {
+  @apply bg-tertiary border-0;
+}
+
+.ql-editor {
+  @apply p-4 min-h-[200px] text-white text-base font-sans;
+}
+
+/* Placeholder */
+.ql-editor.ql-blank::before {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-style: normal !important;
+}
+
+/* Buttons and pickers */
+.ql-toolbar button,
+.ql-toolbar .ql-picker {
+  @apply text-gray-700;
+}
+
+.ql-toolbar button:hover,
+.ql-toolbar button.ql-active,
+.ql-toolbar .ql-picker:hover,
+.ql-toolbar .ql-picker.ql-expanded {
+  @apply text-primary;
+}
+
+.ql-toolbar .ql-picker-options {
+  @apply bg-gray-50 border border-gray-200 shadow-md;
+}
+
+/* Remove borders */
+.ql-toolbar,
+.ql-container,
+.ql-editor {
+  border: none !important;
+}
