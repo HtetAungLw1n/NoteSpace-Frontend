@@ -5,6 +5,9 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import ExplorePage from "./pages/ExplorePage";
 import Error from "./pages/Error";
+import Notes from "./pages/Notes";
+import "react-quill-new/dist/quill.snow.css";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -18,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "/explore",
         element: <ExplorePage />,
+      },
+      {
+        path: "/notes/:id",
+        element: <Notes />,
       },
     ],
   },

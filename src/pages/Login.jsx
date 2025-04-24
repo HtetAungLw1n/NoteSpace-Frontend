@@ -37,7 +37,14 @@ function Login() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-tertiary">
       <div className="bg-secondary rounded-3xl p-12 pt-10 w-full max-w-lg mx-auto">
-        <h1 className="text-3xl font-bold text-center text-primary">
+        <h1 className="text-3xl font-bold text-center text-primary"
+        style={{
+          background:
+            "linear-gradient(45deg, #106110, #c0c79d 50%, #c0c79d 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}>
           Note Space
         </h1>
 

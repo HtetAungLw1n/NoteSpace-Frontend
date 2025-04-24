@@ -4,8 +4,13 @@
   --color-primary: #3d3db8;
   --color-secondary: #fbfbff;
   --color-tertiary: #131313;
-
   --default-font-family: "Poppins", sans-serif;
+}
+
+:root {
+  --summary-panel-width: 350px;
+  --navbar-height: 72px;
+  --content-max-width: 1200px;
 }
 
 body {
@@ -13,6 +18,84 @@ body {
   color: var(--color-secondary);
 }
 
+/* Layout & Container Styles */
+.container.notes-container {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0 20px;
+  padding-top: calc(var(--navbar-height) + 50px);
+}
+
+body.summary-open .container.notes-container {
+  margin-right: var(--summary-panel-width);
+  margin-left: 20px;
+  max-width: calc(100% - var(--summary-panel-width) - 60px);
+}
+
+/* Summary Panel Styles */
+.summarize-panel {
+  height: calc(100vh - var(--navbar-height));
+  top: var(--navbar-height);
+  border: none;
+  width: var(--summary-panel-width) !important;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Quill Editor Customizations */
+.quill-container {
+  position: relative;
+}
+
+.ql-toolbar {
+  @apply relative bg-gray-50 border-0 opacity-0 max-h-0 overflow-hidden transition-all duration-300 ease-in-out pointer-events-none z-10;
+  padding: 0 !important;
+}
+
+.editor-focused .ql-toolbar,
+.quill-container:focus-within .ql-toolbar {
+  @apply opacity-100 max-h-[200px] pointer-events-auto;
+  padding: 8px !important;
+}
+
+.ql-container {
+  @apply bg-tertiary border-0;
+}
+
+.ql-editor {
+  @apply p-4 min-h-[200px] text-white text-base font-sans;
+  padding-left: 0 !important;
+}
+
+.ql-editor.ql-blank::before {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-style: normal !important;
+}
+
+.ql-toolbar button,
+.ql-toolbar .ql-picker {
+  @apply text-gray-700;
+}
+
+.ql-toolbar button:hover,
+.ql-toolbar button.ql-active,
+.ql-toolbar .ql-picker:hover,
+.ql-toolbar .ql-picker.ql-expanded {
+  @apply text-primary;
+}
+
+.ql-toolbar .ql-picker-options {
+  @apply bg-gray-50 border border-gray-200 shadow-md;
+}
+
+.ql-toolbar,
+.ql-container,
+.ql-editor {
+  border: none !important;
+}
+
+/* Text Gradient Animation */
 .text-gradient {
   background: #3d3db8;
   background: linear-gradient(

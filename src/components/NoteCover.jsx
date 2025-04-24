@@ -10,8 +10,8 @@ const NoteCover = ({ note }) => {
 
   return (
     <Link
-      to={`/note/${note.id}`}
-      className="h-56 w-full relative rounded-xl border border-primary  bg-neutral-900"
+      to={`/notes/${note.id}`}
+      className="h-56 w-full relative rounded-xl border border-primary/50 bg-neutral-900 hover:border-primary duration-300"
     >
       <div className="absolute top-2 right-4">
         <Ellipsis
@@ -22,7 +22,16 @@ const NoteCover = ({ note }) => {
             setIsMenuOpen(!isMenuOpen);
           }}
         />
-        {isMenuOpen && <NoteMenu />}
+        {isMenuOpen && (
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+          >
+            <NoteMenu id={note.id} />
+          </div>
+        )}
       </div>
       <div className="absolute bottom-4 right-4">
         <div className="text-white text-sm">{formattedDate}</div>
