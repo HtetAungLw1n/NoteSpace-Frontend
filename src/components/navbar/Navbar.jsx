@@ -6,13 +6,14 @@ import StandardNavLinks from "./StandardNavLinks";
 import SummarizePanel from "../summary/SummarizePanel";
 import { privateAxios } from "../../utils/axios";
 import { showToast } from "../../utils/toast";
+import { useUIContext } from "../../contexts/UIContext";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
+  const { isSummaryOpen, setIsSummaryOpen } = useUIContext();
 
-  const [showSummary, setShowSummary] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [noteData, setNoteData] = useState(null);
   const [summaryData, setSummaryData] = useState(null);
@@ -51,8 +52,8 @@ const Navbar = () => {
 
   // Toggle summary panel visibility
   const handleToggleSummary = () => {
-    const newShowSummary = !showSummary;
-    setShowSummary(newShowSummary);
+    const newShowSummary = !isSummaryOpen;
+    setIsSummaryOpen(newShowSummary);
 
     // If opening the panel, fetch the latest summary
     if (newShowSummary && id) {
@@ -71,7 +72,7 @@ const Navbar = () => {
 
     try {
       setIsSummarizing(true);
-      setShowSummary(true);
+      setIsSummaryOpen(true);
 
       const response = await privateAxios.get(`/notes/${id}/summary/`);
       setSummaryData(response.data);
@@ -117,17 +118,17 @@ const Navbar = () => {
   useEffect(() => {
     if (id) {
       setSummaryData(null);
-      setShowSummary(false);
+      setIsSummaryOpen(false);
       setIsSummarizing(false);
     }
-  }, [id]);
+  }, [id, setIsSummaryOpen]);
 
   // Fetch note data when on a note page
   useEffect(() => {
     if (!id || !isNotePage) {
       setNoteData(null);
       setSummaryData(null);
-      setShowSummary(false);
+      setIsSummaryOpen(false);
       return;
     }
 
@@ -146,23 +147,23 @@ const Navbar = () => {
 
   // Update body class when summary panel is shown/hidden
   useEffect(() => {
-    if (showSummary) {
+    if (isSummaryOpen) {
       document.body.classList.add("summary-open");
     } else {
       document.body.classList.remove("summary-open");
     }
 
     return () => document.body.classList.remove("summary-open");
-  }, [showSummary]);
+  }, [isSummaryOpen]);
 
   // Close summary panel when leaving notes page
   useEffect(() => {
     if (!isNotePage) {
-      setShowSummary(false);
+      setIsSummaryOpen(false);
       setSummaryData(null);
       setIsSummarizing(false);
     }
-  }, [location.pathname, isNotePage]);
+  }, [location.pathname, isNotePage, setIsSummaryOpen]);
 
   return (
     <>
@@ -172,7 +173,7 @@ const Navbar = () => {
 
           {isNotePage ? (
             <NotePageActions
-              showSummary={showSummary}
+              showSummary={isSummaryOpen}
               onToggleSummary={handleToggleSummary}
               onSummarize={handleSummarize}
               onPublishToggle={handlePublishToggle}
@@ -187,7 +188,7 @@ const Navbar = () => {
       </nav>
 
       <SummarizePanel
-        isOpen={showSummary}
+        isOpen={isSummaryOpen}
         summary={summaryData}
         isSummarizing={isSummarizing || isLoadingSummary}
       />
