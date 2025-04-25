@@ -9,6 +9,7 @@ import Note from "./pages/Note";
 import "react-quill-new/dist/quill.snow.css";
 import AIChat from "./components/chat/AIChat";
 import { UIProvider } from "./contexts/UIContext";
+import ReactFlow from "./components/reactFlow/ReactFlow";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/notes/:id",
         element: <Note />,
+      },
+      {
+        path: "/notes/:id/graph",
+        element: <ReactFlow />,
       },
     ],
   },
