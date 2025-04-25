@@ -1,187 +1,188 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #3454c3;
-  --color-secondary: #fbfbff;
-  --color-tertiary: #131313;
-  --default-font-family: "Poppins", sans-serif;
-  --font-orbitron: "Orbitron", sans-serif;
+    --color-primary: #3454c3;
+    --color-secondary: #fbfbff;
+    --color-tertiary: #131313;
+    --default-font-family: "Poppins", sans-serif;
+    --font-orbitron: "Orbitron", sans-serif;
 }
 
 :root {
-  --summary-panel-width: 400px;
-  --navbar-height: 72px;
-  --content-max-width: 1200px;
+    --summary-panel-width: 400px;
+    --navbar-height: 72px;
+    --content-max-width: 1200px;
 }
 
 body {
-  background-color: var(--color-tertiary);
-  color: var(--color-secondary);
+    background-color: var(--color-tertiary);
+    color: var(--color-secondary);
 }
 
 /* Layout & Container Styles */
 .container.notes-container {
-  width: 100%;
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 0 20px;
-  padding-top: calc(var(--navbar-height) + 50px);
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0 20px;
+    padding-top: calc(var(--navbar-height) + 50px);
 }
 
 body.summary-open .container.notes-container {
-  margin-right: var(--summary-panel-width);
-  margin-left: 20px;
-  max-width: calc(100% - var(--summary-panel-width) - 40px);
+    margin-right: var(--summary-panel-width);
+    margin-left: 20px;
+    max-width: calc(100% - var(--summary-panel-width) - 40px);
 }
 
 /* Summary Panel Styles */
 .summarize-panel {
-  height: calc(100vh - var(--navbar-height));
-  top: var(--navbar-height);
-  border: none;
-  width: var(--summary-panel-width) !important;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    height: calc(100vh - var(--navbar-height));
+    top: var(--navbar-height);
+    border: none;
+    width: var(--summary-panel-width) !important;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* AI Chat Panel Animations */
 .chat-panel-show {
-  animation: slideUp 400ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    animation: slideUp 400ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .chat-panel-hide {
-  animation: slideDown 400ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    animation: slideDown 400ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 @keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 @keyframes slideDown {
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(20px);
-    opacity: 0;
-  }
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(20px);
+        opacity: 0;
+    }
 }
 
 .summary-transition {
-  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Quill Editor Customizations */
 .quill-container {
-  position: relative;
+    position: relative;
 }
 
 .ql-toolbar {
-  @apply relative bg-gray-50 border-0 opacity-0 max-h-0 overflow-hidden transition-all duration-300 ease-in-out pointer-events-none z-10;
-  padding: 0 !important;
-}
+    @apply relative bg-gray-50 border-0 opacity-0 max-h-0 transition-all duration-300 ease-in-out pointer-events-none;
+    overflow: visible !important; /* <-- allow dropdowns to escape */
+    z-index: 50 !important; /* <-- make sure it's on top */
+  }
 
 .editor-focused .ql-toolbar,
 .quill-container:focus-within .ql-toolbar {
-  @apply opacity-100 max-h-[200px] pointer-events-auto;
-  padding: 8px !important;
+    @apply opacity-100 max-h-[200px] pointer-events-auto;
+    padding: 8px !important;
 }
 
 .ql-container {
-  @apply bg-tertiary border-0;
+    @apply bg-tertiary border-0;
 }
 
 .ql-editor {
-  @apply p-4 min-h-[200px] text-white text-base font-sans;
-  padding-left: 0 !important;
+    @apply p-4 min-h-[200px] text-white text-base font-sans;
+    padding-left: 0 !important;
 }
 
 .ql-editor.ql-blank::before {
-  color: rgba(255, 255, 255, 0.6) !important;
-  font-style: normal !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    font-style: normal !important;
 }
 
 .ql-toolbar button,
 .ql-toolbar .ql-picker {
-  @apply text-gray-700;
+    @apply text-gray-700;
 }
 
 .ql-toolbar button:hover,
 .ql-toolbar button.ql-active,
 .ql-toolbar .ql-picker:hover,
 .ql-toolbar .ql-picker.ql-expanded {
-  @apply text-primary;
+    @apply text-primary;
 }
 
 .ql-toolbar .ql-picker-options {
-  @apply bg-gray-50 border border-gray-200 shadow-md;
+    @apply bg-gray-50 border border-gray-200 shadow-md;
 }
 
 .ql-toolbar,
 .ql-container,
 .ql-editor {
-  border: none !important;
+    border: none !important;
 }
 
 /* Text Gradient Animation */
 .text-gradient {
-  background: #3d3db8;
-  background: linear-gradient(
-    90deg,
-    rgba(61, 61, 184, 1) 0%,
-    rgba(0, 212, 255, 1) 100%
-  );
-  background-size: 200% auto; /* Makes the gradient big enough to animate */
-  background-position: left center;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradientShift 4s ease infinite;
+    background: #3d3db8;
+    background: linear-gradient(
+        90deg,
+        rgba(61, 61, 184, 1) 0%,
+        rgba(0, 212, 255, 1) 100%
+    );
+    background-size: 200% auto; /* Makes the gradient big enough to animate */
+    background-position: left center;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 4s ease infinite;
 }
 
 @keyframes gradientShift {
-  0% {
-    background-position: left center;
-  }
-  50% {
-    background-position: right center;
-  }
-  100% {
-    background-position: left center;
-  }
+    0% {
+        background-position: left center;
+    }
+    50% {
+        background-position: right center;
+    }
+    100% {
+        background-position: left center;
+    }
 }
 
 body::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .loader {
-  width: 40px;
-  aspect-ratio: 2;
-  --_g: no-repeat radial-gradient(circle closest-side, #ffffff 90%, #ffffff00);
-  background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
-  background-size: calc(100% / 3) 50%;
-  animation: l3 1s infinite linear;
+    width: 40px;
+    aspect-ratio: 2;
+    --_g: no-repeat radial-gradient(circle closest-side, #ffffff 90%, #ffffff00);
+    background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
+    background-size: calc(100% / 3) 50%;
+    animation: l3 1s infinite linear;
 }
 @keyframes l3 {
-  20% {
-    background-position: 0% 0%, 50% 50%, 100% 50%;
-  }
-  40% {
-    background-position: 0% 100%, 50% 0%, 100% 50%;
-  }
-  60% {
-    background-position: 0% 50%, 50% 100%, 100% 0%;
-  }
-  80% {
-    background-position: 0% 50%, 50% 50%, 100% 100%;
-  }
+    20% {
+        background-position: 0% 0%, 50% 50%, 100% 50%;
+    }
+    40% {
+        background-position: 0% 100%, 50% 0%, 100% 50%;
+    }
+    60% {
+        background-position: 0% 50%, 50% 100%, 100% 0%;
+    }
+    80% {
+        background-position: 0% 50%, 50% 50%, 100% 100%;
+    }
 }
