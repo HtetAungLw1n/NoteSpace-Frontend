@@ -54,12 +54,6 @@ const NoteList = () => {
           <FileUp className="w-5 h-5" />
           Import PDF
         </button>
-        <button
-          onClick={() => setImportModalOpen(true)}
-          className="cursor-pointer flex items-center gap-2 p-2 py-2 w-fit my-4 hover:border-primary transition-all duration-300"
-        >
-          <BookmarkIcon className="w-7 h-7" />
-        </button>
       </div>
       <div className="grid grid-cols-3 gap-8 w-full place-items-center pt-4">
         {notes.length === 0 ? (
@@ -68,7 +62,7 @@ const NoteList = () => {
           </div>
         ) : (
           notes.map((note) => (
-            <NoteCover key={note.id} note={note} fetchNotes={fetchNotes} />
+            <NoteCover key={note.id} note={note} fetchNotes={fetchNotes} page={'notes'} />
           ))
         )}
       </div>
