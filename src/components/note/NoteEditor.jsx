@@ -1,10 +1,30 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { privateAxios } from "../../utils/axios";
 
 // Rich text editor for note content with formatting options
-const NoteEditor = ({ content, onChange, isFocused, onFocus, onBlur }) => {
+const NoteEditor = ({ content, onChange, isFocused, onFocus, onBlur, noteId }) => {
   const quillRef = useRef(null);
+  const userId = localStorage.getItem('uid') || 'asdf';
+  const [author, setAuthor] = useState('');
+  const [readonly, setReadonly] = useState(false);
+
+  useEffect(() => {
+    const fetchAuthor = async () => {
+        try {
+            const response = await privateAxios.get(`/notes/${noteId}`)
+            if (response.data.user.id === userId) {
+                setReadonly(false);
+            } else {
+                setReadonly(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    fetchAuthor();
+  }, [])
 
   // Configure Quill modules
   const modules = {
@@ -37,6 +57,7 @@ const NoteEditor = ({ content, onChange, isFocused, onFocus, onBlur }) => {
         modules={modules}
         onFocus={onFocus}
         onBlur={onBlur}
+        readOnly={readonly}
       />
     </div>
   );
