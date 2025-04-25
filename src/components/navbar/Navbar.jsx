@@ -75,7 +75,7 @@ const Navbar = () => {
       setIsSummaryOpen(true);
 
       // Generate a new summary using the summary endpoint
-      const response = await privateAxios.post(`/notes/${id}/summary/`);
+      const response = await privateAxios.get(`/notes/${id}/summary/`);
 
       // After generating, fetch the updated note with the new summary
       const updatedNote = await privateAxios.get(`/notes/${id}/`);

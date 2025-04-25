@@ -159,6 +159,7 @@ const Note = () => {
             isFocused={editorFocused}
             onFocus={handleEditorFocus}
             onBlur={handleEditorBlur}
+            noteId={id}
           />
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { publicAxios } from "../utils/axios";
+import { privateAxios, publicAxios } from "../utils/axios";
 import { User, Eye, EyeOff } from "lucide-react";
 
 function Login() {
@@ -22,6 +22,10 @@ function Login() {
         refresh: data.refresh,
       };
       localStorage.setItem("tokens", JSON.stringify(tokens));
+
+      const user = await privateAxios.get('/auth/users/me/');
+      localStorage.setItem('uid', user.data.id)
+
       navigate("/");
     } catch (err) {
       const errorData = err.response?.data;

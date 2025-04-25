@@ -9,7 +9,8 @@ const Note = ({ note, bookmarks }) => {
     const [loading, setLoading] = useState(false);
     const [isBookmarked, setIsBookmarked] = useState(false);
 
-    const handleBookmarkSave = async () => {
+    const handleBookmarkSave = async (e) => {
+        e.stopPropagation();
         try {
             setLoading(true);
             const response = await privateAxios.post(
@@ -39,7 +40,7 @@ const Note = ({ note, bookmarks }) => {
     }, [])
 
     return (
-        <div className="flex flex-col min-w-[40%] justify-between rounded-xl p-4 border-2 border-neutral-400 hover:border-white bg-transparent transition-all duration-300">
+        <Link to={`/notes/${note.id}`} className="flex flex-col min-w-[40%] justify-between rounded-xl p-4 border-2 border-neutral-400 hover:border-white bg-transparent transition-all duration-300">
             <div className="flex justify-between items-center">
                 <p className="text-white text-xl ">
                     "
@@ -67,7 +68,7 @@ const Note = ({ note, bookmarks }) => {
                     <Bookmark className={`w-6 h-6 ${isBookmarked && 'fill-white'}`} />
                 </button>
             </div>
-        </div>
+        </Link>
     );
 };
 
