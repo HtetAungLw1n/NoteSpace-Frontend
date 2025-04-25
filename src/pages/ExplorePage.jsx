@@ -81,9 +81,9 @@ const ExplorePage = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6 mt-10 px-32 py-10">
-                {isLoading ? (
+                {isLoading && bookmarks.length <= 0? (
                     <div className="loader"></div>
-                ) : exploreNotes.length > 0 && bookmarks.length > 0 ? (
+                ) : exploreNotes.length > 0 ? (
                     exploreNotes.map((note) => (
                         <Note key={note.id} note={note} bookmarks={bookmarks} />
                     ))
