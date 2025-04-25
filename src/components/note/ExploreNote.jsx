@@ -40,19 +40,21 @@ const Note = ({ note, bookmarks }) => {
     }, [])
 
     return (
-        <Link to={`/notes/${note.id}`} className="flex flex-col min-w-[40%] justify-between rounded-xl p-4 border-2 border-neutral-400 hover:border-white bg-transparent transition-all duration-300">
+        <div className="flex flex-col min-w-[40%] justify-between rounded-xl p-4 border-2 border-neutral-400 hover:border-white bg-transparent transition-all duration-300">
             <div className="flex justify-between items-center">
-                <p className="text-white text-xl ">
-                    "
-                    {note?.title
-                        ?.split(" ")
-                        .map(
-                            (word) =>
-                                word.charAt(0).toUpperCase() + word.slice(1)
-                        )
-                        .join(" ")}
-                    "
-                </p>
+                <Link to={`/notes/${note.id}`}>
+                    <p className="text-white text-xl ">
+                        "
+                        {note?.title
+                            ?.split(" ")
+                            .map(
+                                (word) =>
+                                    word.charAt(0).toUpperCase() + word.slice(1)
+                            )
+                            .join(" ")}
+                        "
+                    </p>
+                </Link>
                 <p className="text-secondary/80 text-sm">
                     {note?.user?.username}
                 </p>
@@ -68,7 +70,7 @@ const Note = ({ note, bookmarks }) => {
                     <Bookmark className={`w-6 h-6 ${isBookmarked && 'fill-white'}`} />
                 </button>
             </div>
-        </Link>
+        </div>
     );
 };
 
