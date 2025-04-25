@@ -34,7 +34,7 @@ const ChatPanel = ({ isOpen, onClose }) => {
     <div
       ref={panelRef}
       className={`fixed bottom-23 transition-all duration-500 ease-in-out 
-                  w-[384px] bg-neutral-900 border border-neutral-800 
+                  w-[384px] bg-neutral-900 border border-neutral-700 
                   rounded-3xl shadow-lg z-40 
                   ${isOpen ? "chat-panel-show" : ""} ${positionClass}`}
     >
@@ -54,7 +54,7 @@ const ChatPanel = ({ isOpen, onClose }) => {
               <button
                 key={index}
                 className="text-left bg-neutral-800 hover:bg-neutral-700 
-                           rounded-full py-2 px-4 text-neutral-300 text-sm flex items-center"
+                           rounded-lg py-2 px-4 text-neutral-300 text-sm flex items-center focus:outline-none"
               >
                 <span className="mr-2 text-white opacity-70">💬</span>{" "}
                 {question}
@@ -71,10 +71,10 @@ const ChatPanel = ({ isOpen, onClose }) => {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Type your message..."
-              className="w-full bg-neutral-800 border border-neutral-800 
+              className="w-full bg-neutral-800 border border-neutral-600 
                          rounded-lg py-3 px-4 pr-12 text-white focus:outline-none text-sm"
             />
-            <button className="absolute right-4 text-white">
+            <button className="absolute right-4 text-white focus:outline-none">
               <Send size={18} />
             </button>
           </div>
