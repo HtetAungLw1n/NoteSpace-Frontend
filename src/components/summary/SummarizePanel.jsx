@@ -1,19 +1,26 @@
 import React from "react";
-import LoadingState from "./LoadingState";
+// import LoadingState from "./LoadingState";
 import SummaryContent from "./SummaryContent";
 import EmptySummary from "./EmptySummary";
 import formatSummaryContent from "../../utils/SummaryFormatter";
 
-const SummarizePanel = ({ isOpen, summary, isSummarizing }) => {
-  // Process the summary content if available
+const SummarizePanel = ({
+  isOpen,
+  summary,
+  isSummarizing,
+  isSummarizeButtonClicked,
+}) => {
   const summaryContent = summary?.summary?.content
     ? formatSummaryContent(summary.summary.content)
     : null;
 
-  // Determine the panel's content state
   const hasLoadedWithNoSummary = !isSummarizing && isOpen && !summaryContent;
   const hasLoadedWithSummary = !isSummarizing && isOpen && summaryContent;
   const isLoading = isSummarizing && isOpen;
+
+  const loadingText = isSummarizeButtonClicked
+    ? "Summarizing Data..."
+    : "Loading summary...";
 
   return (
     <div
@@ -29,7 +36,12 @@ const SummarizePanel = ({ isOpen, summary, isSummarizing }) => {
     >
       <div className="h-full flex flex-col">
         <div className="flex-grow overflow-y-auto p-8">
-          {isLoading && <LoadingState />}
+          {isLoading && (
+            <div className="h-full flex items-center justify-center flex-col">
+              <div className="loader"></div>
+              <p className="text-neutral-400 mt-4">{loadingText}</p>
+            </div>
+          )}
           {hasLoadedWithSummary && (
             <SummaryContent summaryContent={summaryContent} />
           )}

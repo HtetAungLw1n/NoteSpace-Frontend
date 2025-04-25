@@ -7,33 +7,26 @@ import SummarizePanel from "../summary/SummarizePanel";
 import { privateAxios } from "../../utils/axios";
 import { showToast } from "../../utils/toast";
 import { useUIContext } from "../../contexts/UIContext";
+import { useNoteContext } from "../../contexts/NoteContext";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
   const { isSummaryOpen, setIsSummaryOpen } = useUIContext();
+  const { noteData, setNoteData } = useNoteContext();
 
   const [isProcessing, setIsProcessing] = useState(false);
-  const [noteData, setNoteData] = useState(null);
-  const [summaryData, setSummaryData] = useState(null);
   const [isSummarizing, setIsSummarizing] = useState(false);
   const [isLoadingSummary, setIsLoadingSummary] = useState(false);
 
-  // Derived state
   const isNotePage = location.pathname.startsWith("/notes/");
 
-  // Fetch summary data from the API
   const fetchSummaryData = async () => {
     if (!id) return;
 
     try {
       const startTime = Date.now();
-
-      // Get the note data existing summary
-      const response = await privateAxios.get(`/notes/${id}/`);
-      setSummaryData(response.data);
-
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, 300 - elapsedTime);
 
@@ -41,8 +34,6 @@ const Navbar = () => {
         setIsLoadingSummary(false);
       }, remainingTime);
     } catch (error) {
-      console.log("Failed to fetch note data", error);
-      setSummaryData(null);
       setTimeout(() => {
         setIsLoadingSummary(false);
       }, 300);
@@ -66,7 +57,6 @@ const Navbar = () => {
     }
   };
 
-  // Generate or refresh summary
   const handleSummarize = async () => {
     if (!id || isSummarizing) return;
 
@@ -74,24 +64,20 @@ const Navbar = () => {
       setIsSummarizing(true);
       setIsSummaryOpen(true);
 
-      // Generate a new summary using the summary endpoint
-      const response = await privateAxios.get(`/notes/${id}/summary/`);
+      await privateAxios.get(`/notes/${id}/summary/`);
 
-      // After generating, fetch the updated note with the new summary
       const updatedNote = await privateAxios.get(`/notes/${id}/`);
-      setSummaryData(updatedNote.data);
+      setNoteData(updatedNote.data);
 
       setTimeout(() => {
         setIsSummarizing(false);
       }, 300);
     } catch (error) {
-      console.error("Failed to generate summary:", error);
       showToast.error("Failed to generate summary");
       setIsSummarizing(false);
     }
   };
 
-  // Toggle publish status for current note
   const handlePublishToggle = async () => {
     if (!id || isProcessing) return;
 
@@ -100,11 +86,14 @@ const Navbar = () => {
 
     try {
       setIsProcessing(true);
-      await privateAxios.patch(`/notes/${id}/`, { is_public: newPublicStatus });
+      const response = await privateAxios.patch(`/notes/${id}/`, {
+        is_public: newPublicStatus,
+      });
       showToast.success(`Note ${actionText}ed successfully`);
 
-      // Update local state
-      setNoteData((prev) => prev && { ...prev, is_public: newPublicStatus });
+      if (response.data) {
+        setNoteData(response.data);
+      }
     } catch (error) {
       console.error(`Failed to ${actionText} note:`, error);
       showToast.error(`Failed to ${actionText} note`);
@@ -122,35 +111,15 @@ const Navbar = () => {
   // Reset states when switching notes
   useEffect(() => {
     if (id) {
-      setSummaryData(null);
-      setIsSummaryOpen(false);
-      setIsSummarizing(false);
+      setIsSummaryOpen(true);
+      setIsLoadingSummary(true);
+
+      setTimeout(() => {
+        fetchSummaryData();
+      }, 1000);
     }
   }, [id, setIsSummaryOpen]);
 
-  // Fetch note data when on a note page
-  useEffect(() => {
-    if (!id || !isNotePage) {
-      setNoteData(null);
-      setSummaryData(null);
-      setIsSummaryOpen(false);
-      return;
-    }
-
-    const fetchData = async () => {
-      try {
-        // Fetch note data
-        const noteResponse = await privateAxios.get(`/notes/${id}/`);
-        setNoteData(noteResponse.data);
-      } catch (error) {
-        console.error("Failed to fetch note data:", error);
-      }
-    };
-
-    fetchData();
-  }, [id, isNotePage]);
-
-  // Update body class when summary panel is shown/hidden
   useEffect(() => {
     if (isSummaryOpen) {
       document.body.classList.add("summary-open");
@@ -163,12 +132,16 @@ const Navbar = () => {
 
   // Close summary panel when leaving notes page
   useEffect(() => {
-    if (!isNotePage) {
+    const pathSegments = location.pathname.split("/").filter(Boolean);
+    // Show summary only on direct note editing pages (/notes/{id})
+    const isNoteEditingPage =
+      pathSegments.length === 2 && pathSegments[0] === "notes";
+
+    if (!isNoteEditingPage) {
       setIsSummaryOpen(false);
-      setSummaryData(null);
       setIsSummarizing(false);
     }
-  }, [location.pathname, isNotePage, setIsSummaryOpen]);
+  }, [location.pathname, setIsSummaryOpen]);
 
   return (
     <>
@@ -194,8 +167,9 @@ const Navbar = () => {
 
       <SummarizePanel
         isOpen={isSummaryOpen}
-        summary={summaryData}
+        summary={noteData}
         isSummarizing={isSummarizing || isLoadingSummary}
+        isSummarizeButtonClicked={isSummarizing}
       />
     </>
   );

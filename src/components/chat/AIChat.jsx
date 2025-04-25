@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import ChatIcon from "./ChatIcon";
 import ChatPanel from "./ChatPanel";
 
-const AIChat = () => {
+const AIChat = ({ noteId }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = useCallback(() => {
@@ -16,7 +16,7 @@ const AIChat = () => {
   return (
     <>
       <ChatIcon onClick={handleToggle} isOpen={isOpen} />
-      <ChatPanel isOpen={isOpen} onClose={handleClose} />
+      <ChatPanel isOpen={isOpen} noteId={noteId} />
     </>
   );
 };

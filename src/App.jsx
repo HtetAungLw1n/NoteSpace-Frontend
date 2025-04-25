@@ -7,8 +7,8 @@ import ExplorePage from "./pages/ExplorePage";
 import Error from "./pages/Error";
 import Note from "./pages/Note";
 import "react-quill-new/dist/quill.snow.css";
-import AIChat from "./components/chat/AIChat";
 import { UIProvider } from "./contexts/UIContext";
+import { NoteProvider } from "./contexts/NoteContext";
 import ReactFlow from "./components/reactFlow/ReactFlow";
 import NoteList from "./components/note/NoteList";
 import BookmarkList from "./components/note/BookmarkList";
@@ -60,8 +60,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <UIProvider>
-      <RouterProvider router={router} />
-      <AIChat />
+      <NoteProvider>
+        <RouterProvider router={router} />
+      </NoteProvider>
     </UIProvider>
   );
 }

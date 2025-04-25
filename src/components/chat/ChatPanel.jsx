@@ -1,19 +1,29 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Send } from "lucide-react";
 import { useUIContext } from "../../contexts/UIContext";
+import { privateAxios } from "../../utils/axios";
+import { cleanResponse } from "../../utils/utils";
 
 const SAMPLE_QUESTIONS = [
-  "How can I handle this error?",
-  "How can I learn by using notespace ?",
+  "How can I learn by using notespace?",
+  "Can you summarize this note?",
+  "What are the key points in this note?",
 ];
 
-const ChatPanel = ({ isOpen, onClose }) => {
+const ChatPanel = ({ isOpen, noteId }) => {
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [previousMessage, setPreviousMessage] = useState("");
+
   const [shouldRender, setShouldRender] = useState(false);
+
   const panelRef = useRef(null);
+  const chatAreaRef = useRef(null);
+
   const { isSummaryOpen } = useUIContext();
 
-  // Panel visibility with animations on mount and unmount
+  // Handle panel visibility with animations
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true);
@@ -25,6 +35,81 @@ const ChatPanel = ({ isOpen, onClose }) => {
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (chatAreaRef.current) {
+      chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+
+  const handleSendMessage = useCallback(async () => {
+    if (!message.trim() || !noteId || isLoading) {
+      return;
+    }
+
+    setChatMessages((prev) => [...prev, { role: "user", content: message }]);
+
+    const userMessage = message;
+    setMessage("");
+    setIsLoading(true);
+
+    try {
+      const payload = {
+        message: userMessage,
+        chat_history: previousMessage ? [previousMessage] : [],
+      };
+
+      const response = await privateAxios.post(
+        `/notes/${noteId}/chat/`,
+        payload
+      );
+
+      let aiResponse = "";
+      if (response.data && response.data.response) {
+        aiResponse = cleanResponse(response.data.response);
+      } else if (response.data) {
+        aiResponse = cleanResponse(response.data);
+      }
+
+      setChatMessages((prev) => [
+        ...prev,
+        { role: "system", content: aiResponse },
+      ]);
+
+      // Store message for chat history in next request
+      if (response.data && response.data.prompt) {
+        setPreviousMessage(response.data.prompt);
+      }
+    } catch (error) {
+      console.error("Chat error:", error.response?.data || error.message);
+
+      setChatMessages((prev) => [
+        ...prev,
+        {
+          role: "system",
+          content:
+            "Sorry, I'm having trouble responding right now. Please try again later.",
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [message, isLoading, noteId, previousMessage]);
+
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        handleSendMessage();
+      }
+    },
+    [handleSendMessage]
+  );
+
+  const handleSampleQuestion = useCallback((question) => {
+    setMessage(question);
+  }, []);
 
   if (!shouldRender) return null;
 
@@ -46,35 +131,74 @@ const ChatPanel = ({ isOpen, onClose }) => {
           </h2>
         </div>
 
-        {/* Chat area */}
-        <div className="flex-grow overflow-y-auto mb-16 flex flex-col space-y-4 p-1">
-          {/* Sample questions */}
-          <div className="flex flex-col space-y-3 mt-auto">
-            {SAMPLE_QUESTIONS.map((question, index) => (
-              <button
-                key={index}
-                className="text-left bg-neutral-800 hover:bg-neutral-700 
-                           rounded-lg py-2 px-4 text-neutral-300 text-sm flex items-center focus:outline-none"
+        {/* Chat Message Area */}
+        <div
+          ref={chatAreaRef}
+          className="flex-grow overflow-y-auto mb-16 flex flex-col space-y-4 p-1"
+        >
+          {chatMessages.length > 0 ? (
+            chatMessages.map((msg, idx) => (
+              <div
+                key={idx}
+                className={`max-w-[85%] ${
+                  msg.role === "user"
+                    ? "self-start bg-primary text-white"
+                    : "self-end bg-neutral-700 text-white"
+                } rounded-lg py-2 px-4 text-sm`}
               >
-                <span className="mr-2 text-white opacity-70">💬</span>{" "}
-                {question}
-              </button>
-            ))}
-          </div>
+                {msg.content}
+              </div>
+            ))
+          ) : (
+            // Sample questions shown when no messages exist
+            <div className="flex flex-col space-y-3 mt-auto">
+              <p className="text-neutral-400 text-sm mb-2">Try asking:</p>
+              {SAMPLE_QUESTIONS.map((question, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleSampleQuestion(question)}
+                  className="text-left bg-neutral-800 hover:bg-neutral-700 
+                           rounded-lg py-2 px-4 text-neutral-300 text-sm flex items-center focus:outline-none"
+                >
+                  <span className="mr-2 text-white opacity-70">💬</span>
+                  {question}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {isLoading && (
+            <div className="self-end flex flex-col items-center bg-neutral-800 text-neutral-300 rounded-lg py-2 px-4 text-sm mt-2">
+              <div
+                className="loader"
+                style={{ width: "28px", transform: "scale(0.8)" }}
+              ></div>
+            </div>
+          )}
         </div>
 
-        {/* Input area */}
+        {/* Input Area */}
         <div className="absolute bottom-5 left-5 right-5">
           <div className="flex items-center relative">
             <input
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="Type your message..."
               className="w-full bg-neutral-800 border border-neutral-600 
-                         rounded-lg py-3 px-4 pr-12 text-white focus:outline-none text-sm"
+                       rounded-lg py-3 px-4 pr-12 text-white focus:outline-none text-sm"
             />
-            <button className="absolute right-4 text-white focus:outline-none">
+            <button
+              onClick={handleSendMessage}
+              disabled={!message.trim() || isLoading}
+              className={`absolute right-4 focus:outline-none ${
+                message.trim() && !isLoading
+                  ? "text-primary"
+                  : "text-neutral-500"
+              }`}
+              aria-label="Send message"
+            >
               <Send size={18} />
             </button>
           </div>

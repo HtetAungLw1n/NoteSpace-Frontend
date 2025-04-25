@@ -35,7 +35,7 @@ const NotePageActions = ({
         className="flex items-center px-4 h-10 rounded text-secondary hover:bg-secondary/10 transition-colors cursor-pointer"
         disabled={isSummarizing}
       >
-        {isSummarizing ? "Summarizing..." : "Summarize"}
+      Summarize
       </button>
 
       <button
