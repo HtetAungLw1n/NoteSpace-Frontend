@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import LandingPage from "./LandingPage";
 import { privateAxios } from "../utils/axios";
-import NoteList from "../components/note/NoteList";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+// import NoteList from "../components/note/NoteList";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { Bookmark, NotepadText } from "lucide-react";
 const Home = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -48,10 +49,28 @@ const Home = () => {
               {isLoading ? <div className="loader"></div> : userInfo.username}
             </div>
             <div className="flex justify-between items-center gap-2 border-b py-4">
-              <div className="text-2xl">{location.pathname === "/bookmarks" ? "My Bookmarks" : "My Notes"}</div>
-              <div className="flex p-3 bg-neutral-800 rounded-xl gap-2">
-                <NavLink to={'/'} className={({ isActive }) => `px-3 py-2 ${isActive && 'bg-primary'} rounded-lg`}>Notes</NavLink>
-                <NavLink to={'/bookmarks'} className={({ isActive }) => `px-3 py-2 ${isActive && 'bg-primary'} rounded-lg`}>Bookmarks</NavLink>
+              <div className="text-2xl">
+                {location.pathname === "/bookmarks"
+                  ? "My Bookmarks"
+                  : "My Notes"}
+              </div>
+              <div className="flex p-2 bg-neutral-800 rounded-xl gap-2">
+                <NavLink
+                  to={"/"}
+                  className={({ isActive }) =>
+                    `px-3 py-2 ${isActive && "bg-primary"} rounded-lg`
+                  }
+                >
+                  <NotepadText size={20} strokeWidth={1.5} />
+                </NavLink>
+                <NavLink
+                  to={"/bookmarks"}
+                  className={({ isActive }) =>
+                    `px-3 py-2 ${isActive && "bg-primary"} rounded-lg`
+                  }
+                >
+                  <Bookmark size={20} strokeWidth={1.5} />
+                </NavLink>
               </div>
             </div>
             <Outlet />

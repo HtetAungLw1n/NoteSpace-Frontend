@@ -1,6 +1,10 @@
 import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SummaryContent = ({ summaryContent }) => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   if (!summaryContent) return null;
 
   return (
@@ -39,7 +43,10 @@ const SummaryContent = ({ summaryContent }) => {
       )}
 
       <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-tertiary to-transparent pt-20">
-        <button className="w-full py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors">
+        <button
+          onClick={() => navigate(`/notes/${id}/graph`)}
+          className="w-full py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors"
+        >
           Show With Graph
         </button>
       </div>
