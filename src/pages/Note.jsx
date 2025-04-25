@@ -1,37 +1,28 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ReactQuill from "react-quill-new";
-import "react-quill-new/dist/quill.snow.css";
-import { privateAxios } from "../utils/axios";
 import { debounce } from "lodash";
+import { privateAxios } from "../utils/axios";
+import NoteEditor from "../components/note/NoteEditor";
+import NoteTitleField from "../components/note/NoteTitleField";
+import SaveStatusIndicator from "../components/note/SaveStatusIndicator";
+import { decodeHTML, createInitialNoteState } from "../utils/utils";
 
-function Note() {
-  // Navigation and routing
+const Note = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const isNewNote = id === "new";
 
-  // State management
   const [note, setNote] = useState("");
   const [content, setContent] = useState("");
   const [editorFocused, setEditorFocused] = useState(false);
   const [saveStatus, setSaveStatus] = useState("saved");
 
-  // Refs for tracking state without re-renders
-  const quillRef = useRef(null);
   const noteRef = useRef({ title: "", content: "" });
   const isSaving = useRef(false);
   const initialLoadDone = useRef(false);
   const hasBeenEdited = useRef(false);
 
-  // Function to decode HTML entities
-  const decodeHTML = (html) => {
-    const txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value;
-  };
-
-  // Keep a ref to the current state for saving on unmount
+  // Save on unmount
   useEffect(() => {
     noteRef.current = { title: note, content };
 
@@ -54,10 +45,10 @@ function Note() {
           setNote(response.data.title);
 
           // Decode HTML entities before setting content
-          const decodedContent = decodeHTML(response.data.content || "");
+          const decodedContent = decodeHTML(response.data.content);
           setContent(decodedContent);
 
-          // Update the ref directly to avoid triggering a save
+          // Avoid saving on initial load
           noteRef.current = {
             title: response.data.title,
             content: decodedContent,
@@ -69,29 +60,19 @@ function Note() {
             setSaveStatus("saved");
           }, 100);
         } catch (err) {
-          console.error("Error loading note:", err);
           setSaveStatus("error");
         }
       };
 
       fetchNote();
     } else if (isNewNote) {
-      setNote("New Note");
-      noteRef.current = { title: "New Note", content: "" };
+      const initialState = createInitialNoteState();
+      setNote(initialState.title);
+      setContent(initialState.content);
+      noteRef.current = initialState;
       initialLoadDone.current = true;
     }
   }, [id, isNewNote]);
-
-  // Configure Quill modules
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image"],
-      ["clean"],
-    ],
-  };
 
   // Create debounced save function
   const debouncedSave = useRef(
@@ -108,30 +89,28 @@ function Note() {
       try {
         setSaveStatus("saving");
 
-        // If it's not a new note and we have an ID, update
+        // Update if not new note
         if (id && id !== "new") {
           await privateAxios.patch(`/notes/${id}/`, {
             title: noteTitle,
             content: noteContent,
           });
         } else {
-          // It's a new note, create it
+          // Create if new
           const response = await privateAxios.post("/notes/", {
             title: noteTitle,
             content: noteContent,
           });
 
-          // If we get an ID back, navigate to the proper note URL
+          // After successful note creation, redirect to the permanent note URL
           if (response.data && response.data.id) {
             navigate(`/notes/${response.data.id}`, {
               replace: true,
             });
           }
         }
-
         setSaveStatus("saved");
       } catch (err) {
-        console.error("Error saving note:", err);
         setSaveStatus("error");
       } finally {
         isSaving.current = false;
@@ -139,7 +118,7 @@ function Note() {
     }, 1000)
   ).current;
 
-  // Call debounced save whenever note or content changes
+  // Call debounced save whenever note changes
   useEffect(() => {
     // Only save if the note has been edited after initial load
     if (initialLoadDone.current && hasBeenEdited.current && (note || content)) {
@@ -155,34 +134,11 @@ function Note() {
     };
   }, [debouncedSave]);
 
-  // Get save status indicator component
-  const getSaveStatusIndicator = () => {
-    switch (saveStatus) {
-      case "saving":
-        return (
-          <div className="text-neutral-400 text-sm flex items-center">
-            <div className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse mr-2"></div>
-            Saving...
-          </div>
-        );
-      case "saved":
-        return (
-          <div className="text-neutral-400 text-sm flex items-center">
-            <div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
-            Saved
-          </div>
-        );
-      case "error":
-        return (
-          <div className="text-red-400 text-sm flex items-center">
-            <div className="w-2 h-2 rounded-full bg-red-500 mr-2"></div>
-            Error saving
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+  // Event handlers
+  const handleTitleChange = (e) => setNote(e.target.value);
+  const handleContentChange = (value) => setContent(value);
+  const handleEditorFocus = () => setEditorFocused(true);
+  const handleEditorBlur = () => setEditorFocused(false);
 
   return (
     <div className="min-h-screen bg-tertiary text-primary">
@@ -190,45 +146,24 @@ function Note() {
         <div className="flex flex-col ml-6">
           {/* Title row with save indicator */}
           <div className="flex items-center justify-between mb-2">
-            <input
-              type="text"
-              value={note || ""}
-              onChange={(e) => setNote(e.target.value)}
-              className="text-5xl font-bold w-full focus:outline-none bg-transparent truncate summary-open:max-w-[calc(100%-600px)]"
-              placeholder="New Note"
-              aria-label="Note title"
-            />
-            <div className="mr-4">{getSaveStatusIndicator()}</div>
+            <NoteTitleField title={note} onChange={handleTitleChange} />
+            <div className="min-w-[120px] text-right mr-12">
+              <SaveStatusIndicator status={saveStatus} />
+            </div>
           </div>
 
           {/* Editor container */}
-          <div
-            className={`quill-container ${
-              editorFocused ? "editor-focused" : ""
-            }`}
-            onClick={() => {
-              if (quillRef.current) {
-                const editor = quillRef.current.getEditor();
-                if (editor) editor.focus();
-              }
-            }}
-          >
-            <ReactQuill
-              ref={quillRef}
-              value={content}
-              onChange={setContent}
-              className="w-full min-h-[calc(100vh-250px)] bg-transparent resize-none focus:outline-none text-md"
-              placeholder="Start typing here..."
-              theme="snow"
-              modules={modules}
-              onFocus={() => setEditorFocused(true)}
-              onBlur={() => setEditorFocused(false)}
-            />
-          </div>
+          <NoteEditor
+            content={content}
+            onChange={handleContentChange}
+            isFocused={editorFocused}
+            onFocus={handleEditorFocus}
+            onBlur={handleEditorBlur}
+          />
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Note;

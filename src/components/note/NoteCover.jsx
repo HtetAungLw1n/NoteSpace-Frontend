@@ -2,7 +2,7 @@ import { Ellipsis } from "lucide-react";
 import React, { useState } from "react";
 import NoteMenu from "./NoteMenu";
 import { Link } from "react-router-dom";
-import { dateFormatter } from "../utils/formatter";
+import { dateFormatter } from "../../utils/formatter";
 
 const NoteCover = ({ note, fetchNotes }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

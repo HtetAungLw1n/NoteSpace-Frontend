@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
-import Note from "../components/Note";
+import Note from "../components/note/ExploreNote";
 import { privateAxios } from "../utils/axios";
 
 const ExplorePage = () => {
