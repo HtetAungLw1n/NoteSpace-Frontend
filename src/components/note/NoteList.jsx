@@ -1,9 +1,10 @@
-import { FileUp, BookmarkIcon, PlusIcon } from "lucide-react";
+import { FileUp, PlusIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NoteCover from "./NoteCover";
 import { privateAxios } from "../../utils/axios";
 import ImportModal from "../modal/ImportModal";
+import { motion } from "framer-motion";
 
 const NoteList = () => {
   const [notes, setNotes] = useState([]);
@@ -55,17 +56,27 @@ const NoteList = () => {
           Import PDF
         </button>
       </div>
-      <div className="grid grid-cols-3 gap-8 w-full place-items-center pt-4">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeInOut", delay: 0.5 }}
+        className="grid grid-cols-3 gap-8 w-full place-items-center pt-4"
+      >
         {notes.length === 0 ? (
           <div className="text-secondary text-lg text-start w-full">
             No notes found. Start creating notes.
           </div>
         ) : (
           notes.map((note) => (
-            <NoteCover key={note.id} note={note} fetchNotes={fetchNotes} page={'notes'} />
+            <NoteCover
+              key={note.id}
+              note={note}
+              fetchNotes={fetchNotes}
+              page={"notes"}
+            />
           ))
         )}
-      </div>
+      </motion.div>
 
       {importModalOpen && (
         <ImportModal onClose={() => setImportModalOpen(false)} />

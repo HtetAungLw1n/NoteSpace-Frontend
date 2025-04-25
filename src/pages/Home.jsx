@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import LandingPage from "./LandingPage";
 import { privateAxios } from "../utils/axios";
-// import NoteList from "../components/note/NoteList";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { Bookmark, NotepadText } from "lucide-react";
+import { motion } from "framer-motion";
+
 const Home = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -33,7 +34,12 @@ const Home = () => {
     <>
       {!isLogin && <LandingPage />}
       {isLogin && (
-        <div className="container mx-auto pt-40 pb-10">
+        <motion.div
+          className="container mx-auto pt-40 pb-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
           <div className="flex flex-col justify-center px-26">
             <div
               className="text-6xl font-semibold py-2"
@@ -75,7 +81,7 @@ const Home = () => {
             </div>
             <Outlet />
           </div>
-        </div>
+        </motion.div>
       )}
     </>
   );
