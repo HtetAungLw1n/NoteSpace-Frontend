@@ -6,10 +6,9 @@ import formatSummaryContent from "../../utils/SummaryFormatter";
 
 const SummarizePanel = ({ isOpen, summary, isSummarizing }) => {
   // Process the summary content if available
-  const summaryContent =
-    summary?.summary?.content
-      ? formatSummaryContent(summary.summary.content)
-      : null;
+  const summaryContent = summary?.summary?.content
+    ? formatSummaryContent(summary.summary.content)
+    : null;
 
   // Determine the panel's content state
   const hasLoadedWithNoSummary = !isSummarizing && isOpen && !summaryContent;

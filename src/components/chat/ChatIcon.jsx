@@ -12,7 +12,7 @@ const ChatIcon = ({ onClick, isOpen }) => {
     <button
       onClick={onClick}
       className={`fixed bottom-5 transition-all duration-500 ease-in-out 
-                  bg-purple-500 hover:bg-purple-600 
+                  bg-primary hover:bg-blue-500 
                   rounded-full w-13 h-13 
                   flex items-center justify-center 
                   shadow-lg z-50 cursor-pointer

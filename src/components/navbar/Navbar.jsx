@@ -28,13 +28,12 @@ const Navbar = () => {
     if (!id) return;
 
     try {
-      setIsLoadingSummary(true);
       const startTime = Date.now();
 
-      const response = await privateAxios.get(`/notes/${id}/summary/`);
+      // Get the note data existing summary
+      const response = await privateAxios.get(`/notes/${id}/`);
       setSummaryData(response.data);
 
-      // Ensure loading state is visible for at least 300ms for better UX
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, 300 - elapsedTime);
 
@@ -42,7 +41,7 @@ const Navbar = () => {
         setIsLoadingSummary(false);
       }, remainingTime);
     } catch (error) {
-      console.log("No existing summary found");
+      console.log("Failed to fetch note data", error);
       setSummaryData(null);
       setTimeout(() => {
         setIsLoadingSummary(false);
@@ -55,11 +54,12 @@ const Navbar = () => {
     const newShowSummary = !isSummaryOpen;
     setIsSummaryOpen(newShowSummary);
 
-    // If opening the panel, fetch the latest summary
     if (newShowSummary && id) {
-      fetchSummaryData();
+      setIsLoadingSummary(true);
+      setTimeout(() => {
+        fetchSummaryData();
+      }, 1000);
     } else if (!newShowSummary) {
-      // If closing the panel while still loading, cancel loading state
       if (isLoadingSummary) {
         setIsLoadingSummary(false);
       }
@@ -74,14 +74,19 @@ const Navbar = () => {
       setIsSummarizing(true);
       setIsSummaryOpen(true);
 
-      const response = await privateAxios.get(`/notes/${id}/summary/`);
-      setSummaryData(response.data);
+      // Generate a new summary using the summary endpoint
+      const response = await privateAxios.post(`/notes/${id}/summary/`);
+
+      // After generating, fetch the updated note with the new summary
+      const updatedNote = await privateAxios.get(`/notes/${id}/`);
+      setSummaryData(updatedNote.data);
+
       setTimeout(() => {
         setIsSummarizing(false);
       }, 300);
     } catch (error) {
-      console.error("Failed to summarize note:", error);
-      showToast.error("Failed to summarize note");
+      console.error("Failed to generate summary:", error);
+      showToast.error("Failed to generate summary");
       setIsSummarizing(false);
     }
   };
