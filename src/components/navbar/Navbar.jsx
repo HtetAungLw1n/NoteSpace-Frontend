@@ -92,7 +92,7 @@ const Navbar = () => {
         setIsSummarizing(false);
       }, 300);
     } catch (error) {
-      showToast.error("Failed to generate summary");
+      showToast.error("Server currently busy");
       setIsSummarizing(false);
     }
   };
@@ -179,6 +179,7 @@ const Navbar = () => {
               isSummarizing={isSummarizing}
               isProcessing={isProcessing}
               isPublished={noteData?.is_public}
+              readonly={readonly}
             />
           ) : (
             <StandardNavLinks onLogout={handleLogout} isLoggedIn={userId !== ""} />
