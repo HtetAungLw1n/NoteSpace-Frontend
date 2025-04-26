@@ -10,97 +10,116 @@ import { useUIContext } from "../../contexts/UIContext";
 import { useNoteContext } from "../../contexts/NoteContext";
 
 const Navbar = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const { isSummaryOpen, setIsSummaryOpen } = useUIContext();
-  const { noteData, setNoteData } = useNoteContext();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const userId = localStorage.getItem("uid") || "";
+    const { isSummaryOpen, setIsSummaryOpen } = useUIContext();
+    const { noteData, setNoteData } = useNoteContext();
+    const [readonly, setReadonly] = useState(true);
 
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [isSummarizing, setIsSummarizing] = useState(false);
-  const [isLoadingSummary, setIsLoadingSummary] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [isSummarizing, setIsSummarizing] = useState(false);
+    const [isLoadingSummary, setIsLoadingSummary] = useState(false);
 
-  const isNotePage = location.pathname.startsWith("/notes/");
+    const isNotePage = location.pathname.startsWith("/notes/");
 
-  const fetchSummaryData = async () => {
-    if (!id) return;
+    useEffect(() => {
+        const fetchNote = async () => {
+            try {
+                const response = await privateAxios.get(`/notes/${id}`)
+                setReadonly(userId !== response.data.user.id);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchNote();
+    });
 
-    try {
-      const startTime = Date.now();
-      const elapsedTime = Date.now() - startTime;
-      const remainingTime = Math.max(0, 300 - elapsedTime);
+    const fetchSummaryData = async () => {
+        if (!id) return;
 
-      setTimeout(() => {
-        setIsLoadingSummary(false);
-      }, remainingTime);
-    } catch (error) {
-      setTimeout(() => {
-        setIsLoadingSummary(false);
-      }, 300);
-    }
-  };
+        try {
+            const startTime = Date.now();
+            const elapsedTime = Date.now() - startTime;
+            const remainingTime = Math.max(0, 300 - elapsedTime);
 
-  // Toggle summary panel visibility
-  const handleToggleSummary = () => {
-    const newShowSummary = !isSummaryOpen;
-    setIsSummaryOpen(newShowSummary);
+            setTimeout(() => {
+                setIsLoadingSummary(false);
+            }, remainingTime);
+        } catch (error) {
+            setTimeout(() => {
+                setIsLoadingSummary(false);
+            }, 300);
+        }
+    };
 
-    if (newShowSummary && id) {
-      setIsLoadingSummary(true);
-      setTimeout(() => {
-        fetchSummaryData();
-      }, 1000);
-    } else if (!newShowSummary) {
-      if (isLoadingSummary) {
-        setIsLoadingSummary(false);
-      }
-    }
-  };
+    // Toggle summary panel visibility
+    const handleToggleSummary = () => {
+        const newShowSummary = !isSummaryOpen;
+        setIsSummaryOpen(newShowSummary);
 
-  const handleSummarize = async () => {
-    if (!id || isSummarizing) return;
+        if (newShowSummary && id) {
+            setIsLoadingSummary(true);
+            setTimeout(() => {
+                fetchSummaryData();
+            }, 1000);
+        } else if (!newShowSummary) {
+            if (isLoadingSummary) {
+                setIsLoadingSummary(false);
+            }
+        }
+    };
 
-    try {
-      setIsSummarizing(true);
-      setIsSummaryOpen(true);
+    const handleSummarize = async () => {
+        if (!id || isSummarizing) return;
 
-      await privateAxios.get(`/notes/${id}/summary/`);
+        if (readonly) {
+            showToast.error("Access denied")
+            return;
+        }
 
-      const updatedNote = await privateAxios.get(`/notes/${id}/`);
-      setNoteData(updatedNote.data);
+        try {
+            setIsSummarizing(true);
+            setIsSummaryOpen(true);
+
+            await privateAxios.get(`/notes/${id}/summary/`);
+
+            const updatedNote = await privateAxios.get(`/notes/${id}/`);
+            setNoteData(updatedNote.data);
 
       setTimeout(() => {
         setIsSummarizing(false);
       }, 300);
     } catch (error) {
-      showToast.error("Server is currently busy.");
+      showToast.error("Failed to generate summary");
       setIsSummarizing(false);
     }
   };
 
-  const handlePublishToggle = async () => {
-    if (!id || isProcessing) return;
+    const handlePublishToggle = async () => {
+        if (!id || isProcessing) return;
 
-    const newPublicStatus = !noteData?.is_public;
-    const actionText = newPublicStatus ? "publish" : "unpublish";
+        const newPublicStatus = !noteData?.is_public;
+        const actionText = newPublicStatus ? "publish" : "unpublish";
 
-    try {
-      setIsProcessing(true);
-      const response = await privateAxios.patch(`/notes/${id}/`, {
-        is_public: newPublicStatus,
-      });
-      showToast.success(`Note ${actionText}ed successfully`);
+        try {
+            setIsProcessing(true);
+            const response = await privateAxios.patch(`/notes/${id}/`, {
+                is_public: newPublicStatus,
+            });
+            showToast.success(`Note ${actionText}ed successfully`);
 
-      if (response.data) {
-        setNoteData(response.data);
-      }
-    } catch (error) {
-      console.error(`Failed to ${actionText} note:`, error);
-      showToast.error(`Failed to ${actionText} note`);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+            if (response.data) {
+                setNoteData(response.data);
+            }
+        } catch (error) {
+            console.error(`Failed to ${actionText} note:`, error);
+            showToast.error(`Failed to ${actionText} note`);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
   // Logout and redirect to login page
   const handleLogout = () => {
@@ -109,34 +128,34 @@ const Navbar = () => {
     window.location.reload();
   };
 
-  // Reset states when switching notes
-  useEffect(() => {
-    if (id) {
-      setIsSummaryOpen(true);
-      setIsLoadingSummary(true);
+    // Reset states when switching notes
+    useEffect(() => {
+        if (id) {
+            setIsSummaryOpen(true);
+            setIsLoadingSummary(true);
 
-      setTimeout(() => {
-        fetchSummaryData();
-      }, 1000);
-    }
-  }, [id, setIsSummaryOpen]);
+            setTimeout(() => {
+                fetchSummaryData();
+            }, 1000);
+        }
+    }, [id, setIsSummaryOpen]);
 
-  useEffect(() => {
-    if (isSummaryOpen) {
-      document.body.classList.add("summary-open");
-    } else {
-      document.body.classList.remove("summary-open");
-    }
+    useEffect(() => {
+        if (isSummaryOpen) {
+            document.body.classList.add("summary-open");
+        } else {
+            document.body.classList.remove("summary-open");
+        }
 
-    return () => document.body.classList.remove("summary-open");
-  }, [isSummaryOpen]);
+        return () => document.body.classList.remove("summary-open");
+    }, [isSummaryOpen]);
 
-  // Close summary panel when leaving notes page
-  useEffect(() => {
-    const pathSegments = location.pathname.split("/").filter(Boolean);
-    // Show summary only on direct note editing pages (/notes/{id})
-    const isNoteEditingPage =
-      pathSegments.length === 2 && pathSegments[0] === "notes";
+    // Close summary panel when leaving notes page
+    useEffect(() => {
+        const pathSegments = location.pathname.split("/").filter(Boolean);
+        // Show summary only on direct note editing pages (/notes/{id})
+        const isNoteEditingPage =
+            pathSegments.length === 2 && pathSegments[0] === "notes";
 
     if (!isNoteEditingPage) {
       setIsSummaryOpen(false);
@@ -144,13 +163,11 @@ const Navbar = () => {
     }
   }, [location.pathname, setIsSummaryOpen]);
 
-  const isLoggedIn = localStorage.getItem("tokens") !== null;
-
-  return (
-    <>
-      <nav className="fixed top-0 left-0 right-0 bg-neutral-900/30 backdrop-blur-md z-50">
-        <div className="container mx-auto flex justify-between items-center h-full p-4">
-          <Logo />
+    return (
+        <>
+            <nav className="fixed top-0 left-0 right-0 bg-neutral-900/30 backdrop-blur-md z-50">
+                <div className="container mx-auto flex justify-between items-center h-full p-4">
+                    <Logo />
 
           {isNotePage ? (
             <NotePageActions
@@ -163,19 +180,17 @@ const Navbar = () => {
               isPublished={noteData?.is_public}
             />
           ) : (
-            <StandardNavLinks onLogout={handleLogout} isLoggedIn={isLoggedIn} />
+            <StandardNavLinks onLogout={handleLogout} />
           )}
         </div>
       </nav>
 
-      {location.pathname !== "/" && (
-        <SummarizePanel
-          isOpen={isSummaryOpen}
-          summary={noteData}
-          isSummarizing={isSummarizing || isLoadingSummary}
-          isSummarizeButtonClicked={isSummarizing}
-        />
-      )}
+      <SummarizePanel
+        isOpen={isSummaryOpen}
+        summary={noteData}
+        isSummarizing={isSummarizing || isLoadingSummary}
+        isSummarizeButtonClicked={isSummarizing}
+      />
     </>
   );
 };

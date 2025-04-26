@@ -10,6 +10,7 @@ const NotePageActions = ({
   isSummarizing,
   isProcessing,
   isPublished,
+  readonly
 }) => {
   return (
     <div className="flex items-center gap-4">
@@ -40,8 +41,8 @@ const NotePageActions = ({
 
       <button
         onClick={onPublishToggle}
-        className="flex items-center px-4 h-10 bg-primary text-white rounded hover:bg-primary/90 transition-colors cursor-pointer"
-        disabled={isProcessing}
+        className={`flex items-center px-4 h-10 ${readonly ? 'bg-primary/40 !cursor-not-allowed' : 'bg-primary hover:bg-primary/90'} text-white rounded transition-colors cursor-pointer`}
+        disabled={isProcessing || readonly}
       >
         {isProcessing
           ? isPublished
