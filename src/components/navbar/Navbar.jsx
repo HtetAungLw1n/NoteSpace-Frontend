@@ -105,7 +105,8 @@ const Navbar = () => {
   // Logout and redirect to login page
   const handleLogout = () => {
     localStorage.removeItem("tokens");
-    navigate("/login");
+    navigate("/");
+    window.location.reload();
   };
 
   // Reset states when switching notes
@@ -143,6 +144,8 @@ const Navbar = () => {
     }
   }, [location.pathname, setIsSummaryOpen]);
 
+  const isLoggedIn = localStorage.getItem("tokens") !== null;
+
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 bg-neutral-900/30 backdrop-blur-md z-50">
@@ -160,7 +163,7 @@ const Navbar = () => {
               isPublished={noteData?.is_public}
             />
           ) : (
-            <StandardNavLinks onLogout={handleLogout} />
+            <StandardNavLinks onLogout={handleLogout} isLoggedIn={isLoggedIn} />
           )}
         </div>
       </nav>
