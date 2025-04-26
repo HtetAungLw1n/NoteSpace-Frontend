@@ -54,6 +54,8 @@ const ChatPanel = ({ isOpen, noteId }) => {
     setMessage("");
     setIsLoading(true);
 
+    const startTime = Date.now();
+
     try {
       const payload = {
         message: userMessage,
@@ -78,18 +80,24 @@ const ChatPanel = ({ isOpen, noteId }) => {
       ]);
 
       // Store message for chat history in next request
-      if (response.data && response.data.prompt) {
+      if (response.status === 200 && response.data && response.data.prompt) {
         setPreviousMessage(response.data.prompt);
       }
     } catch (error) {
       console.error("Chat error:", error.response?.data || error.message);
 
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, 1000 - elapsedTime);
+
+      if (remainingTime > 0) {
+        await new Promise((resolve) => setTimeout(resolve, remainingTime));
+      }
+
       setChatMessages((prev) => [
         ...prev,
         {
           role: "system",
-          content:
-            "Sorry, I'm having trouble responding right now. Please try again later.",
+          content: "Server is currently busy. Please try again shortly.",
         },
       ]);
     } finally {
@@ -120,21 +128,21 @@ const ChatPanel = ({ isOpen, noteId }) => {
       ref={panelRef}
       className={`fixed bottom-23 transition-all duration-500 ease-in-out 
                   w-[384px] bg-neutral-900 border border-neutral-700 
-                  rounded-3xl shadow-lg z-40 
+                  rounded-3xl shadow-lg z-200 
                   ${isOpen ? "chat-panel-show" : ""} ${positionClass}`}
     >
       <div className="p-5 flex flex-col h-[450px] rounded-3xl">
         {/* Header */}
         <div className="pb-4 border-b border-neutral-800 mb-4">
           <h2 className="text-xl text-white font-medium text-center">
-            AI Assistant
+            Dhoke Htoe Assistant
           </h2>
         </div>
 
         {/* Chat Message Area */}
         <div
           ref={chatAreaRef}
-          className="flex-grow overflow-y-auto mb-16 flex flex-col space-y-4 p-1"
+          className="flex-grow overflow-y-auto scrollbar-hide mb-16 flex flex-col space-y-4 p-1"
         >
           {chatMessages.length > 0 ? (
             chatMessages.map((msg, idx) => (
@@ -142,8 +150,8 @@ const ChatPanel = ({ isOpen, noteId }) => {
                 key={idx}
                 className={`max-w-[85%] ${
                   msg.role === "user"
-                    ? "self-start bg-primary text-white"
-                    : "self-end bg-neutral-700 text-white"
+                    ? "self-end bg-primary text-white"
+                    : "self-start bg-neutral-700 text-white"
                 } rounded-lg py-2 px-4 text-sm`}
               >
                 {msg.content}
@@ -168,7 +176,7 @@ const ChatPanel = ({ isOpen, noteId }) => {
           )}
 
           {isLoading && (
-            <div className="self-end flex flex-col items-center bg-neutral-800 text-neutral-300 rounded-lg py-2 px-4 text-sm mt-2">
+            <div className="self-start flex flex-col items-center bg-neutral-800 text-neutral-300 rounded-lg py-2 px-4 text-sm mt-2">
               <div
                 className="loader"
                 style={{ width: "28px", transform: "scale(0.8)" }}

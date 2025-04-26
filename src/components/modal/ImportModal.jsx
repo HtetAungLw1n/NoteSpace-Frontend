@@ -1,13 +1,23 @@
 import { Download, DownloadIcon, PlusIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { privateAxios } from "../../utils/axios";
 import { showToast } from "../../utils/toast";
 
 const ImportModal = ({ onClose }) => {
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Disable scrolling when modal is mounted
+    document.body.style.overflow = "hidden";
+
+    // Re-enable scrolling when modal is unmounted
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];

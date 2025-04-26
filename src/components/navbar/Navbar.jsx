@@ -88,14 +88,14 @@ const Navbar = () => {
             const updatedNote = await privateAxios.get(`/notes/${id}/`);
             setNoteData(updatedNote.data);
 
-            setTimeout(() => {
-                setIsSummarizing(false);
-            }, 300);
-        } catch (error) {
-            showToast.error("Server currently busy");
-            setIsSummarizing(false);
-        }
-    };
+      setTimeout(() => {
+        setIsSummarizing(false);
+      }, 300);
+    } catch (error) {
+      showToast.error("Failed to generate summary");
+      setIsSummarizing(false);
+    }
+  };
 
     const handlePublishToggle = async () => {
         if (!id || isProcessing) return;
@@ -121,11 +121,12 @@ const Navbar = () => {
         }
     };
 
-    // Logout and redirect to login page
-    const handleLogout = () => {
-        localStorage.removeItem("tokens");
-        navigate("/login");
-    };
+  // Logout and redirect to login page
+  const handleLogout = () => {
+    localStorage.removeItem("tokens");
+    navigate("/");
+    window.location.reload();
+  };
 
     // Reset states when switching notes
     useEffect(() => {
@@ -156,11 +157,11 @@ const Navbar = () => {
         const isNoteEditingPage =
             pathSegments.length === 2 && pathSegments[0] === "notes";
 
-        if (!isNoteEditingPage) {
-            setIsSummaryOpen(false);
-            setIsSummarizing(false);
-        }
-    }, [location.pathname, setIsSummaryOpen]);
+    if (!isNoteEditingPage) {
+      setIsSummaryOpen(false);
+      setIsSummarizing(false);
+    }
+  }, [location.pathname, setIsSummaryOpen]);
 
     return (
         <>
@@ -168,31 +169,30 @@ const Navbar = () => {
                 <div className="container mx-auto flex justify-between items-center h-full p-4">
                     <Logo />
 
-                    {isNotePage ? (
-                        <NotePageActions
-                            showSummary={isSummaryOpen}
-                            onToggleSummary={handleToggleSummary}
-                            onSummarize={handleSummarize}
-                            onPublishToggle={handlePublishToggle}
-                            isSummarizing={isSummarizing}
-                            isProcessing={isProcessing}
-                            isPublished={noteData?.is_public}
-                            readonly={readonly}
-                        />
-                    ) : (
-                        <StandardNavLinks onLogout={handleLogout} />
-                    )}
-                </div>
-            </nav>
-
-            <SummarizePanel
-                isOpen={isSummaryOpen}
-                summary={noteData}
-                isSummarizing={isSummarizing || isLoadingSummary}
-                isSummarizeButtonClicked={isSummarizing}
+          {isNotePage ? (
+            <NotePageActions
+              showSummary={isSummaryOpen}
+              onToggleSummary={handleToggleSummary}
+              onSummarize={handleSummarize}
+              onPublishToggle={handlePublishToggle}
+              isSummarizing={isSummarizing}
+              isProcessing={isProcessing}
+              isPublished={noteData?.is_public}
             />
-        </>
-    );
+          ) : (
+            <StandardNavLinks onLogout={handleLogout} />
+          )}
+        </div>
+      </nav>
+
+      <SummarizePanel
+        isOpen={isSummaryOpen}
+        summary={noteData}
+        isSummarizing={isSummarizing || isLoadingSummary}
+        isSummarizeButtonClicked={isSummarizing}
+      />
+    </>
+  );
 };
 
 export default Navbar;

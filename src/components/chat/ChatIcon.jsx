@@ -5,7 +5,7 @@ import { useUIContext } from "../../contexts/UIContext";
 const ChatIcon = ({ onClick, isOpen }) => {
   const { isSummaryOpen } = useUIContext();
 
-  const positionClass = isSummaryOpen ? "right-[520px]" : "right-12";
+  const positionClass = isSummaryOpen ? "right-[450px]" : "right-12";
   const animationClass = !isOpen ? "pulse-animation" : "";
 
   return (
