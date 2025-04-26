@@ -73,7 +73,7 @@ const Navbar = () => {
         setIsSummarizing(false);
       }, 300);
     } catch (error) {
-      showToast.error("Failed to generate summary");
+      showToast.error("Server is currently busy.");
       setIsSummarizing(false);
     }
   };
@@ -165,12 +165,14 @@ const Navbar = () => {
         </div>
       </nav>
 
-      <SummarizePanel
-        isOpen={isSummaryOpen}
-        summary={noteData}
-        isSummarizing={isSummarizing || isLoadingSummary}
-        isSummarizeButtonClicked={isSummarizing}
-      />
+      {location.pathname !== "/" && (
+        <SummarizePanel
+          isOpen={isSummaryOpen}
+          summary={noteData}
+          isSummarizing={isSummarizing || isLoadingSummary}
+          isSummarizeButtonClicked={isSummarizing}
+        />
+      )}
     </>
   );
 };

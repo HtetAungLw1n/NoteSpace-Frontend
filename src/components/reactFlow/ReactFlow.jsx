@@ -194,7 +194,7 @@ const ReactFlowComponent = () => {
   }
 
   return (
-    <div style={{ width: "100vw", height: "100vh", background: "#111827" }}>
+    <div style={{ width: "100vw", height: "100vh", background: "#131313" }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -203,11 +203,11 @@ const ReactFlowComponent = () => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         fitView
-        style={{ background: "#111827" }}
+        style={{ background: "#131313" }}
         defaultEdgeOptions={{ type: "CustomEdge" }}
       >
         <Controls style={{ color: "black" }} />
-        <Background color="#aaa" gap={16} />
+        <Background color="#304884" gap={20} variant="dots" />
       </ReactFlow>
     </div>
   );

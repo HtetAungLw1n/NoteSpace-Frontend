@@ -9,7 +9,7 @@ const SummaryContent = ({ summaryContent }) => {
   const { noteData } = useNoteContext();
 
   const updatedTimeAgo = noteData?.updated_at
-    ? timeAgo(noteData.updated_at)
+    ? timeAgo(noteData.summary.updated_at)
     : "Just now";
 
   if (!summaryContent) return null;
@@ -32,9 +32,6 @@ const SummaryContent = ({ summaryContent }) => {
       {/* Main Points */}
       {summaryContent.points.length > 0 && (
         <div>
-          <h4 className="text-white font-medium mb-4">
-            Summarized Main Points:
-          </h4>
           <ul className="space-y-3">
             {summaryContent.points.map((point, index) => (
               <li
