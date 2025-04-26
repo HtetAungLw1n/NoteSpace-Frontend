@@ -16,6 +16,7 @@ import { privateAxios } from "../../utils/axios";
 import { useNoteContext } from "../../contexts/NoteContext";
 
 import "@xyflow/react/dist/style.css";
+import { showToast } from "../../utils/toast";
 
 // Define CustomNode component inline to avoid import issues
 const CustomNode = ({ data }) => {
@@ -167,6 +168,7 @@ const ReactFlowComponent = () => {
         }
       } catch (error) {
         console.error("Failed to process graph data:", error);
+        showToast.error("Server is currently busy");
       } finally {
         setLoading(false);
       }

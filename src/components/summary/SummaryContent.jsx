@@ -49,7 +49,7 @@ const SummaryContent = ({ summaryContent }) => {
       <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-tertiary to-transparent pt-20">
         <button
           onClick={() => navigate(`/notes/${id}/graph`)}
-          className="w-full py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors"
+          className="w-full py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors cursor-pointer"
         >
           Show With Graph
         </button>

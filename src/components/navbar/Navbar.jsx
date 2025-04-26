@@ -92,7 +92,7 @@ const Navbar = () => {
         setIsSummarizing(false);
       }, 300);
     } catch (error) {
-      showToast.error("Server currently busy");
+      showToast.error("Server is currently busy");
       setIsSummarizing(false);
     }
   };

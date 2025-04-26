@@ -5,8 +5,7 @@ import { privateAxios } from "../../utils/axios";
 import { cleanResponse } from "../../utils/utils";
 
 const SAMPLE_QUESTIONS = [
-  "How can I learn by using notespace?",
-  "Can you summarize this note?",
+  "What is NoteSpace?",
   "What are the key points in this note?",
 ];
 
@@ -125,7 +124,7 @@ const ChatPanel = ({ isOpen, noteId }) => {
 
   if (!shouldRender) return null;
 
-  const positionClass = isSummaryOpen ? "right-[545px]" : "right-20";
+  const positionClass = isSummaryOpen ? "right-[480px]" : "right-20";
 
   return (
     <div
@@ -170,7 +169,7 @@ const ChatPanel = ({ isOpen, noteId }) => {
                   key={index}
                   onClick={() => handleSampleQuestion(question)}
                   className="text-left bg-neutral-800 hover:bg-neutral-700 
-                           rounded-lg py-2 px-4 text-neutral-300 text-sm flex items-center focus:outline-none"
+                           rounded-lg py-2 px-4 text-neutral-300 text-sm flex items-center focus:outline-none cursor-pointer"
                 >
                   <span className="mr-2 text-white opacity-70">💬</span>
                   {question}
@@ -204,7 +203,7 @@ const ChatPanel = ({ isOpen, noteId }) => {
             <button
               onClick={handleSendMessage}
               disabled={!message.trim() || isLoading}
-              className={`absolute right-4 focus:outline-none ${
+              className={`absolute right-4 focus:outline-none cursor-pointer ${
                 message.trim() && !isLoading
                   ? "text-primary"
                   : "text-neutral-500"
