@@ -124,6 +124,7 @@ const Navbar = () => {
   // Logout and redirect to login page
   const handleLogout = () => {
     localStorage.removeItem("tokens");
+    localStorage.removeItem("uid");
     navigate("/");
     window.location.reload();
   };
@@ -180,7 +181,7 @@ const Navbar = () => {
               isPublished={noteData?.is_public}
             />
           ) : (
-            <StandardNavLinks onLogout={handleLogout} />
+            <StandardNavLinks onLogout={handleLogout} isLoggedIn={userId !== ""} />
           )}
         </div>
       </nav>

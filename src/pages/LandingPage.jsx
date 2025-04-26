@@ -11,14 +11,15 @@ const LandingPage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="flex flex-col items-center justify-end h-[70vh] gap-10"
+        className="flex flex-col items-center justify-end h-[50vh] gap-10"
       >
         <div className="text-6xl font-bold text-center">
           Welcome to <span className="text-gradient ">NoteSpace</span>
         </div>
-        <p className="text-gray-500 w-1/2 text-center text-pretty">
-          NoteSpace is a note-taking app that allows you to take notes, organize
-          your notes, and share your notes with others.
+        <p className="text-gray-500 w-2/3 text-center text-pretty">
+          NoteSpace is an AI-powered app that transforms PDFs into structured
+          notes, with summaries, interactive graphs, and a community to share
+          and bookmark insights.
         </p>
         <Link
           to="/login"
@@ -37,15 +38,15 @@ const LandingPage = () => {
         exit={{ opacity: 0, y: -20 }}
         className="flex flex-col items-center justify-center mt-10 "
       >
-        <div className="w-[80%] h-[80vh] rounded-xl relative bg-neutral-900 border border-white/40 overflow-hidden">
+        <div className="w-[80%] h-[60vh] rounded-xl relative bg-neutral-900 border border-white/40 overflow-hidden">
           <img
-            src="/"
-            alt="#"
+            src="/Landing-main.png"
+            alt="Landing main image"
             className="absolute top-15 left-1/2 w-[85%] object-cover translate-x-[-50%] rounded-lg"
           />
         </div>
         <div className="text-secondary/50 mt-8">
-          A place where you can create note and import pdf into notes
+          NoteSpace — Your AI-Powered Note-Taking Universe
         </div>
       </motion.div>
 
@@ -58,14 +59,14 @@ const LandingPage = () => {
         exit={{ opacity: 0, y: -20 }}
         className="flex justify-center items-center gap-10 mt-40 w-[90%] mx-auto"
       >
-        <div className="w-[60%] h-[70vh] rounded-xl relative bg-neutral-900 border border-white/40 overflow-hidden">
+        <div className="w-[60%] h-[50vh] rounded-xl relative bg-neutral-900 border border-white/40 overflow-hidden">
           <img
             src="/home.webp"
             alt="#"
             className="absolute top-15 left-1/2 w-full h-full object-cover translate-x-[-50%] rounded-lg"
           />
         </div>
-        <div className="w-1/3 h-[70vh] flex flex-col items-start justify-around">
+        <div className="w-1/3 h-[50vh] flex flex-col items-start justify-around">
           <div>
             <div className="text-2xl mb-8">
               Organize your notes, Smarter and
@@ -74,7 +75,7 @@ const LandingPage = () => {
               Capture ideas, Organize Notes, and boost productivity with Ai.
             </div>
           </div>
-          <div className="flex flex-col items-start justify-around gap-4">
+          <div className="flex flex-col items-start justify-around">
             <div className="text-primary pr-4 py-2 rounded-full flex items-center gap-2">
               <DotIcon /> Note Management
             </div>
@@ -96,7 +97,7 @@ const LandingPage = () => {
         exit={{ opacity: 0, y: -20 }}
         className="flex justify-center items-center gap-10 mt-40 w-[90%] mx-auto"
       >
-        <div className="w-1/3 h-[70vh] flex flex-col items-start justify-around">
+        <div className="w-1/3 h-[50vh] flex flex-col items-start justify-around">
           <div>
             <div className="text-2xl mb-8">
               Discover other people notes and add to your workflow
@@ -105,7 +106,7 @@ const LandingPage = () => {
               Capture ideas, Organize Notes, and boost productivity with Ai.
             </div>
           </div>
-          <div className="flex flex-col items-start justify-around gap-4">
+          <div className="flex flex-col items-start justify-around">
             <div className="text-primary pr-4 py-2 rounded-full flex items-center gap-2">
               <DotIcon /> Smart Search
             </div>
@@ -115,7 +116,7 @@ const LandingPage = () => {
           </div>
         </div>
 
-        <div className="w-[60%] h-[70vh] rounded-xl relative bg-neutral-900 border border-white/40 overflow-hidden">
+        <div className="w-[60%] h-[50vh] rounded-xl relative bg-neutral-900 border border-white/40 overflow-hidden">
           <img
             src="/explore.webp"
             alt="#"
@@ -132,14 +133,14 @@ const LandingPage = () => {
         exit={{ opacity: 0, y: -20 }}
         className="flex justify-center items-center gap-10 mt-40 w-[90%] mx-auto"
       >
-        <div className="w-[60%] h-[70vh] rounded-xl relative bg-neutral-900 border border-white/40 overflow-hidden">
+        <div className="w-[60%] h-[50vh] rounded-xl relative bg-neutral-900 border border-white/40 overflow-hidden">
           <img
-            src="/"
-            alt="#"
+            src="/Landing-main.png"
+            alt="Landing main image"
             className="absolute top-15 left-1/2 w-[85%] object-cover translate-x-[-50%] rounded-lg"
           />
         </div>
-        <div className="w-1/3 h-[70vh] flex flex-col items-start justify-around">
+        <div className="w-1/3 h-[50vh] flex flex-col items-start justify-around">
           <div>
             <div className="text-2xl mb-8">
               Visualize your ideas like never before
@@ -149,7 +150,7 @@ const LandingPage = () => {
               concepts, and uncover new insights effortlessly.
             </div>
           </div>
-          <div className="flex flex-col items-start justify-around gap-4">
+          <div className="flex flex-col items-start justify-around">
             <div className="text-primary pr-4 py-2 rounded-full flex items-center gap-2">
               <DotIcon /> Interactive Graph
             </div>

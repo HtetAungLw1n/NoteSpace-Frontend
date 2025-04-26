@@ -11,6 +11,7 @@ const ExplorePage = () => {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
+  const userId = localStorage.getItem("uid") || "";
 
   useEffect(() => {
     const searchNotes = async () => {
@@ -33,7 +34,8 @@ const ExplorePage = () => {
   const fetchExploreNotes = async () => {
     try {
       setIsLoading(true);
-      const response = await privateAxios.get("/notes/public");
+      const response = await publicAxios.get("/notes/public");
+      console.log(response.data);
       setExploreNotes(response.data);
     } catch (error) {
       console.error("Failed to fetch public notes:", error);
@@ -110,7 +112,11 @@ const ExplorePage = () => {
           ))
         ) : (
           <div className="text-secondary text-lg text-start w-full">
-            No notes found.
+            {userId === "" ? (
+              <div>Please Login first</div>
+            ) : (
+              <div>No notes found</div>
+            )}
           </div>
         )}
       </motion.div>

@@ -14,7 +14,7 @@ const ChatPanel = ({ isOpen, noteId }) => {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
-  const [previousMessage, setPreviousMessage] = useState("");
+  const [chatHistory, setChatHistory] = useState([]);
 
   const [shouldRender, setShouldRender] = useState(false);
 
@@ -59,13 +59,17 @@ const ChatPanel = ({ isOpen, noteId }) => {
     try {
       const payload = {
         message: userMessage,
-        chat_history: previousMessage ? [previousMessage] : [],
+        chat_history: chatHistory,
       };
+
+      console.log("Chat API Payload:", payload);
 
       const response = await privateAxios.post(
         `/notes/${noteId}/chat/`,
         payload
       );
+
+      console.log("AI Response Data:", response.data);
 
       let aiResponse = "";
       if (response.data && response.data.response) {
@@ -79,9 +83,9 @@ const ChatPanel = ({ isOpen, noteId }) => {
         { role: "system", content: aiResponse },
       ]);
 
-      // Store message for chat history in next request
+      // Store all messages for chat history
       if (response.status === 200 && response.data && response.data.prompt) {
-        setPreviousMessage(response.data.prompt);
+        setChatHistory((prev) => [...prev, response.data.prompt]);
       }
     } catch (error) {
       console.error("Chat error:", error.response?.data || error.message);
@@ -103,7 +107,7 @@ const ChatPanel = ({ isOpen, noteId }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [message, isLoading, noteId, previousMessage]);
+  }, [message, isLoading, noteId, chatHistory]);
 
   const handleKeyDown = useCallback(
     (e) => {

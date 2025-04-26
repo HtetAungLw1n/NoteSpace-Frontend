@@ -23,7 +23,7 @@ const SummaryContent = ({ summaryContent }) => {
       {/* Main Summary */}
       {summaryContent.summary && (
         <div className="mb-8">
-          <p className="text-neutral-300 leading-relaxed">
+          <p className="text-neutral-300 leading-relaxed whitespace-pre-line">
             {summaryContent.summary}
           </p>
         </div>
@@ -39,7 +39,7 @@ const SummaryContent = ({ summaryContent }) => {
                 className="flex items-start text-neutral-300 leading-relaxed"
               >
                 <span className="text-primary mr-3">-</span>
-                <span>{point}</span>
+                <span className="whitespace-pre-line">{point}</span>
               </li>
             ))}
           </ul>

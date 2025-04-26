@@ -54,8 +54,8 @@ function Register() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-tertiary">
       <div className="bg-secondary rounded-3xl p-12 pt-10 w-full max-w-lg mx-auto">
-        <h1 className="text-3xl font-bold text-center text-primary">
-          Note Space
+        <h1 className="text-3xl font-bold text-center text-primary font-orbitron">
+          NoteSpace
         </h1>
 
         <form onSubmit={handleRegister} className="space-y-6 mt-6">

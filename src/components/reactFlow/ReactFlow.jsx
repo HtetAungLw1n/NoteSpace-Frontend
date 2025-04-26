@@ -203,6 +203,14 @@ const ReactFlowComponent = () => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         fitView
+        fitViewOptions={{
+          padding: 0.2,
+          minZoom: 0.5,
+          maxZoom: 0.8,
+          includeHiddenNodes: false,
+          duration: 500,
+        }}
+        defaultViewport={{ x: 0, y: 0, zoom: 0.6 }}
         style={{ background: "#131313" }}
         defaultEdgeOptions={{ type: "CustomEdge" }}
       >

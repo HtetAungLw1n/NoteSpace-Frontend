@@ -2,19 +2,40 @@
 const formatSummaryContent = (text) => {
   if (!text) return null;
 
-  if (text.includes("Summarized Main Points:")) {
-    // Split the main points section
-    const [mainSummary, mainPoints] = text.split("Summarized Main Points:");
+  // Check if the text contains bullet points (lines starting with - or •)
+  const hasListItems = /\n[-•]/.test(text);
+
+  if (hasListItems) {
+    // Split the text into paragraphs
+    const paragraphs = text.split(/\n\n+/);
+
+    // First paragraph is usually the main summary
+    const mainSummary = paragraphs[0].trim();
+
+    // Extract all bullet points from the text
+    // Match any line that starts with - or • followed by text
+    const bulletPoints = [];
+    const lines = text.split("\n");
+
+    lines.forEach((line) => {
+      // Trim the line and check if it starts with - or •
+      const trimmed = line.trim();
+      if (trimmed.startsWith("-") || trimmed.startsWith("•")) {
+        // Remove the bullet point marker and add to the list
+        const pointContent = trimmed.substring(1).trim();
+        if (pointContent.length > 0) {
+          bulletPoints.push(pointContent);
+        }
+      }
+    });
+
     return {
-      summary: mainSummary.trim(),
-      points: mainPoints
-        .split(/[-•]/)
-        .map((point) => point.trim())
-        .filter((point) => point.length > 0),
+      summary: mainSummary,
+      points: bulletPoints,
     };
   }
 
-  // Fall back to sentence splitting if no main points section
+  // Fall back to treating the whole text as summary if no bullet points
   return {
     summary: text,
     points: [],
