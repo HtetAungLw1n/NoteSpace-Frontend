@@ -59,7 +59,7 @@ const NoteList = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeInOut", delay: 0.5 }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
         className="grid grid-cols-3 gap-8 w-full place-items-center pt-4"
       >
         {notes.length === 0 ? (
