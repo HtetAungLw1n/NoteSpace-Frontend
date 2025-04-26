@@ -1,16 +1,23 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { timeAgo } from "../../utils/formatter";
+import { useNoteContext } from "../../contexts/NoteContext";
 
 const SummaryContent = ({ summaryContent }) => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { noteData } = useNoteContext();
+
+  const updatedTimeAgo = noteData?.updated_at
+    ? timeAgo(noteData.updated_at)
+    : "Just now";
 
   if (!summaryContent) return null;
 
   return (
     <div className="mt-4 pb-28">
       <div className="flex items-center justify-between mb-6">
-        <div className="text-neutral-400 text-sm">Updated 2m ago</div>
+        <div className="text-neutral-400 text-sm">Updated {updatedTimeAgo}</div>
       </div>
 
       {/* Main Summary */}

@@ -11,7 +11,7 @@ export const useUIContext = () => {
 };
 
 export const UIProvider = ({ children }) => {
-  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [isSummaryOpen, setIsSummaryOpen] = useState(true);
 
   // Memoized context value to prevent unnecessary rerenders
   const value = useMemo(

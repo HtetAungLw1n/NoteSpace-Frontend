@@ -13,3 +13,20 @@ export const createInitialNoteState = () => {
     content: "",
   };
 };
+
+export const cleanResponse = (response) => {
+  if (!response) return "";
+
+  // Handle nested response object
+  if (typeof response === "object" && response.response) {
+    response = response.response;
+  }
+
+  // Handle string response
+  if (typeof response === "string") {
+    return response.replace(/No Chat History\s*\n+\s*/i, "");
+  }
+
+  // Fallback for other types
+  return String(response);
+};

@@ -13,6 +13,7 @@ import {
 } from "@xyflow/react";
 import { useParams } from "react-router-dom";
 import { privateAxios } from "../../utils/axios";
+import { useNoteContext } from "../../contexts/NoteContext";
 
 import "@xyflow/react/dist/style.css";
 
@@ -78,6 +79,7 @@ const CustomEdge = ({ id, data, ...props }) => {
 
 const ReactFlowComponent = () => {
   const { id } = useParams();
+  const { noteData } = useNoteContext();
   const [initialNodes, setInitialNodes] = useState([]);
   const [initialEdges, setInitialEdges] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -129,13 +131,29 @@ const ReactFlowComponent = () => {
   };
 
   useEffect(() => {
-    const fetchSummary = async () => {
+    const processGraphData = async () => {
       try {
         setLoading(true);
+        if (noteData && noteData.summary && noteData.summary.graph) {
+          const parsedGraph = JSON.parse(noteData.summary.graph);
+
+          if (parsedGraph.nodes) {
+            setNodes(parsedGraph.nodes);
+          }
+
+          if (parsedGraph.edges) {
+            const processedEdges = processEdges(parsedGraph.edges);
+            setEdges(processedEdges);
+          }
+
+          setLoading(false);
+          return;
+        }
+
+        // Fallback to fetching if data not available in context
         const response = await privateAxios.get(`/notes/${id}/`);
 
         if (response.data.summary && response.data.summary.graph) {
-          console.log("Graph data:", response.data.summary.graph);
           const parsedGraph = JSON.parse(response.data.summary.graph);
 
           if (parsedGraph.nodes) {
@@ -145,17 +163,17 @@ const ReactFlowComponent = () => {
           if (parsedGraph.edges) {
             const processedEdges = processEdges(parsedGraph.edges);
             setEdges(processedEdges);
-            console.log("Processed Edges:", processedEdges);
           }
         }
       } catch (error) {
-        console.error("Failed to fetch summary:", error);
+        console.error("Failed to process graph data:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchSummary();
-  }, [id, processEdges]);
+
+    processGraphData();
+  }, [id, noteData, processEdges, setNodes, setEdges]);
 
   // Node types mapping
   const nodeTypes = {

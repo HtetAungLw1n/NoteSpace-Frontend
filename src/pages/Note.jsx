@@ -7,11 +7,15 @@ import NoteTitleField from "../components/note/NoteTitleField";
 import SaveStatusIndicator from "../components/note/SaveStatusIndicator";
 import { decodeHTML, createInitialNoteState } from "../utils/utils";
 import { motion } from "framer-motion";
+import AIChat from "../components/chat/AIChat";
+import { useNoteContext } from "../contexts/NoteContext";
+
 const Note = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const isNewNote = id === "new";
   const userId = localStorage.getItem("uid") || "";
+  const { setNoteData } = useNoteContext();
 
   const [note, setNote] = useState("");
   const [content, setContent] = useState("");
@@ -44,9 +48,8 @@ const Note = () => {
           hasBeenEdited.current = false;
 
           const response = await privateAxios.get(`/notes/${id}/`);
+          setNoteData(response.data);
           setNote(response.data.title);
-          console.log(userId + " hi " + response.data.user.id);
-
           setReadonly(userId !== response.data.user.id);
 
           // Decode HTML entities before setting content
@@ -76,8 +79,9 @@ const Note = () => {
       setContent(initialState.content);
       noteRef.current = initialState;
       initialLoadDone.current = true;
+      setNoteData(null);
     }
-  }, [id, isNewNote]);
+  }, [id, isNewNote, setNoteData]);
 
   // Create debounced save function
   const debouncedSave = useRef(
@@ -96,10 +100,14 @@ const Note = () => {
 
         // Update if not new note
         if (id && id !== "new") {
-          await privateAxios.patch(`/notes/${id}/`, {
+          const response = await privateAxios.patch(`/notes/${id}/`, {
             title: noteTitle,
             content: noteContent,
           });
+
+          if (response.data) {
+            setNoteData(response.data);
+          }
         } else {
           // Create if new
           const response = await privateAxios.post("/notes/", {
@@ -107,8 +115,9 @@ const Note = () => {
             content: noteContent,
           });
 
-          // After successful note creation, redirect to the permanent note URL
+          // After successful note creation, update context and redirect
           if (response.data && response.data.id) {
+            setNoteData(response.data);
             navigate(`/notes/${response.data.id}`, {
               replace: true,
             });
@@ -175,6 +184,9 @@ const Note = () => {
           />
         </div>
       </div>
+
+      {/* AI Chat component */}
+      {!isNewNote && <AIChat noteId={id} />}
     </motion.div>
   );
 };
