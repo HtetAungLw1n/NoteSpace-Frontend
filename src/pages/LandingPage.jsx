@@ -14,12 +14,10 @@ const LandingPage = () => {
                 className="flex flex-col items-center justify-end h-[50vh] gap-10"
             >
                 <div className="text-6xl font-bold text-center">
-                    Welcome to <span className="text-gradient ">NoteSpace</span>
+                    Write <span className="text-gradient">Smarter</span>, Understand Better
                 </div>
                 <p className="text-gray-500 w-2/3 text-center text-pretty">
-                    NoteSpace is an AI-powered app that transforms PDFs into
-                    structured notes, with summaries, interactive graphs, and a
-                    community to share and bookmark insights.
+                    NoteSpace uses AI to convert your PDFs into smart, searchable notes — complete with summaries, visual graphs, and collaborative features to boost your productivity.
                 </p>
                 <Link
                     to="/login"
@@ -46,7 +44,7 @@ const LandingPage = () => {
                     />
                 </div>
                 <div className="text-secondary/50 mt-8">
-                    NoteSpace — Your AI-Powered Note-Taking Universe
+                    Your Knowledge, Mapped Visually.
                 </div>
             </motion.div>
 
@@ -69,7 +67,7 @@ const LandingPage = () => {
                 <div className="w-1/3 h-[50vh] flex flex-col items-start justify-around">
                     <div>
                         <div className="text-2xl mb-8">
-                            Turn Chaos into Clarity — With AI Superpowers
+                            From Upload to Organized Notes in Seconds
                         </div>
                         <div className="text-gray-400">
                             Jot it. Organize it. Find it. All at the speed of
@@ -81,10 +79,10 @@ const LandingPage = () => {
                             <DotIcon /> All-in-One Note Control
                         </div>
                         <div className="text-primary pr-4 py-2 rounded-full flex items-center gap-2">
-                            <DotIcon /> Instant PDF Import
+                            <DotIcon /> Instant PDF-to-note conversion
                         </div>
                         <div className="text-primary pr-4 py-2 rounded-full flex items-center gap-2">
-                            <DotIcon /> Quick Bookmarking and Access
+                            <DotIcon /> Quick access with bookmarks
                         </div>
                     </div>
                 </div>
@@ -101,7 +99,7 @@ const LandingPage = () => {
                 <div className="w-1/3 h-[50vh] flex flex-col items-start justify-around">
                     <div>
                         <div className="text-2xl mb-8">
-                            Explore New Ideas and Supercharge Your Workflow
+                            Learn Faster with Shared Knowledge
                         </div>
                         <div className="text-gray-400">
                             Find, capture, and integrate notes from other users
@@ -145,19 +143,19 @@ const LandingPage = () => {
                 <div className="w-1/3 h-[50vh] flex flex-col items-start justify-around">
                     <div>
                         <div className="text-2xl mb-8">
-                            Visualize Your Ideas Like Never Before
+                            Think Visually, Work Smarter
                         </div>
                         <div className="text-gray-400">
-                            Create a living network of thoughts. Map your notes,
-                            link concepts, and unlock new insights effortlessly.
+                            Your notes become interactive mind maps. 
+                            Explore connections between ideas and uncover insights effortlessly.
                         </div>
                     </div>
                     <div className="flex flex-col items-start justify-around">
                         <div className="text-primary pr-4 py-2 rounded-full flex items-center gap-2">
-                            <DotIcon /> Interactive Graph
+                            <DotIcon /> Dynamic Knolwedge Graphs
                         </div>
                         <div className="text-primary pr-4 py-2 rounded-full flex items-center gap-2">
-                            <DotIcon /> Idea Expansion
+                            <DotIcon /> Connect your Ideas
                         </div>
                     </div>
                 </div>
@@ -173,19 +171,19 @@ const LandingPage = () => {
                 className="flex flex-col items-center justify-center w-[95%] mx-auto mt-20 "
             >
                 <div className="text-3xl font-bold mb-18">
-                    How our features deliver effectively in this app
+                    Everything You Need to Supercharge Your Notes
                 </div>
                 <div className="flex justify-center items-center w-[90%] h-[50vh] gap-6">
                     <div className="w-1/3 h-full bg-neutral-900  border border-white/40 rounded-xl text-center flex flex-col justify-center items-center">
                         <div>
                             <img src="/hugeicons_note.png" alt="" />
                         </div>
-                        <h1 className="text-2xl font-bold mt-2">
+                        <h1 className="text-2xl font-bold mt-2 text-gradient">
                             AI Powered Notes
                         </h1>
                         <div className="text-sm text-neutral-400 text-pretty mt-4 w-[80%]">
-                            Turn your messy pdfs into crystal-clear notes —
-                            instantly organized, always findable.
+                            Clean, concise notes from messy PDFs — 
+                            ready to read and share.
                         </div>
                     </div>
                     <div className="w-1/3 h-full bg-neutral-900 border border-white/40 rounded-xl text-center flex flex-col justify-center items-center">
@@ -195,20 +193,19 @@ const LandingPage = () => {
                                 alt=""
                             />
                         </div>
-                        <h1 className="text-2xl font-bold mt-2">
+                        <h1 className="text-2xl font-bold mt-2 text-gradient">
                             Visual Graph Summaries
                         </h1>
                         <div className="text-sm text-neutral-400 text-pretty mt-4 w-[80%]">
-                            Watch your notes transform into mind maps and graphs
-                            without lifting a finger.
+                            Turn notes into structured, mind map-like graphs in one click.
                         </div>
                     </div>
                     <div className="w-1/3 h-full bg-neutral-900 border border-white/40 rounded-xl text-center flex flex-col justify-center items-center">
                         <div>
                             <img src="/hugeicons_ai-magic.png" alt="" />
                         </div>
-                        <h1 className="text-2xl font-bold mt-2">
-                            Ai assistant chat
+                        <h1 className="text-2xl font-bold mt-2 text-gradient">
+                            Ai Assistant Chat
                         </h1>
                         <div className="text-sm text-neutral-400 text-pretty mt-4 w-[80%]">
                             Stuck? Let AI brainstorm, expand, or polish your
